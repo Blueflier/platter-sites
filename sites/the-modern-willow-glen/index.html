@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Modern Willow Glen | Contemporary Salon in San Jose</title>
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --gold: #C8A45E;
+  --gold-light: #E8D5A3;
+  --gold-dark: #A6843A;
+  --warm-bg: #FAF7F2;
+  --cream: #F5F0E8;
+  --text-dark: #2A2420;
+  --text-medium: #5C534A;
+  --text-light: #8A7F74;
+  --white: #FFFFFF;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--warm-bg);
+  color: var(--text-dark);
+  overflow-x: hidden;
+  line-height: 1.7;
+}
+
+#three-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Navigation */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  padding: 1.2rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.4s ease;
+}
+
+nav.scrolled {
+  background: rgba(250, 247, 242, 0.92);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 1px 20px rgba(42, 36, 32, 0.06);
+}
+
+.nav-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-weight: 500;
+  color: var(--text-dark);
+  letter-spacing: 0.08em;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  align-items: center;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--text-medium);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover { color: var(--gold); }
+
+.nav-cta {
+  background: var(--gold) !important;
+  color: var(--white) !important;
+  padding: 0.6rem 1.5rem;
+  border-radius: 50px;
+  transition: all 0.3s !important;
+}
+
+.nav-cta:hover {
+  background: var(--gold-dark) !important;
+  transform: translateY(-1px);
+}
+
+.mobile-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.mobile-toggle span {
+  width: 24px;
+  height: 2px;
+  background: var(--text-dark);
+  transition: all 0.3s;
+}
+
+/* Hero */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+}
+
+.hero-content {
+  max-width: 800px;
+}
+
+.hero-label {
+  font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 300;
+  line-height: 1.1;
+  color: var(--text-dark);
+  margin-bottom: 1.5rem;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.hero-tagline {
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  color: var(--text-light);
+  font-weight: 300;
+  margin-bottom: 2.5rem;
+  max-width: 550px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn-primary {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--white);
+  padding: 1rem 2.8rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: all 0.4s ease;
+  box-shadow: 0 4px 25px rgba(200, 164, 94, 0.35);
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: var(--gold-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 35px rgba(200, 164, 94, 0.45);
+}
+
+.btn-secondary {
+  display: inline-block;
+  background: transparent;
+  color: var(--gold-dark);
+  padding: 1rem 2.8rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: all 0.4s ease;
+  border: 2px solid var(--gold);
+  cursor: pointer;
+  margin-left: 1rem;
+}
+
+.btn-secondary:hover {
+  background: var(--gold);
+  color: var(--white);
+  transform: translateY(-2px);
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0.5;
+  animation: float 3s ease-in-out infinite;
+}
+
+.scroll-indicator span {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* Sections */
+section {
+  padding: clamp(4rem, 8vw, 8rem) clamp(1.5rem, 5vw, 4rem);
+}
+
+.section-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem, 4.5vw, 3.5rem);
+  font-weight: 300;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  color: var(--text-dark);
+}
+
+/* About */
+.about {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.about-text p {
+  color: var(--text-medium);
+  font-size: clamp(0.95rem, 1.3vw, 1.05rem);
+  margin-bottom: 1.5rem;
+  font-weight: 300;
+  line-height: 1.9;
+}
+
+.about-features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.feature-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  border: 1px solid rgba(200, 164, 94, 0.1);
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(42, 36, 32, 0.08);
+  border-color: rgba(200, 164, 94, 0.25);
+}
+
+.feature-icon {
+  font-size: 1.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.feature-card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+  color: var(--text-dark);
+}
+
+.feature-card p {
+  font-size: 0.82rem;
+  color: var(--text-light);
+  font-weight: 300;
+}
+
+/* Services */
+.services {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.service-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  border: 1px solid rgba(200, 164, 94, 0.08);
+  transition: all 0.4s ease;
+  text-align: left;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 50px rgba(42, 36, 32, 0.08);
+  border-color: rgba(200, 164, 94, 0.2);
+}
+
+.service-number {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: var(--gold-light);
+  margin-bottom: 1rem;
+}
+
+.service-card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin-bottom: 0.8rem;
+  color: var(--text-dark);
+}
+
+.service-card p {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+/* Hours */
+.hours-section {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hours-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.hours-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 2.5rem;
+  border: 1px solid rgba(200, 164, 94, 0.1);
+}
+
+.hours-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid rgba(200, 164, 94, 0.08);
+  font-size: 0.92rem;
+}
+
+.hours-row:last-child { border-bottom: none; }
+
+.hours-day {
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.hours-time {
+  color: var(--text-light);
+  font-weight: 300;
+}
+
+.hours-time.closed {
+  color: var(--gold);
+  font-weight: 500;
+}
+
+.hours-info {
+  padding-top: 1rem;
+}
+
+.hours-info h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  margin-bottom: 1rem;
+  color: var(--text-dark);
+}
+
+.hours-info p {
+  color: var(--text-medium);
+  font-weight: 300;
+  font-size: 0.95rem;
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
+
+/* Contact */
+.contact {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin: 3rem 0;
+}
+
+.contact-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  border: 1px solid rgba(200, 164, 94, 0.1);
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.contact-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 45px rgba(42, 36, 32, 0.08);
+  border-color: rgba(200, 164, 94, 0.25);
+}
+
+.contact-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.contact-card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.contact-card p {
+  font-size: 0.88rem;
+  color: var(--text-light);
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+.contact-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.social-links {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2.5rem;
+}
+
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  transition: all 0.3s;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--text-medium);
+  border: 1px solid rgba(200, 164, 94, 0.15);
+}
+
+.social-link:hover {
+  background: var(--gold);
+  color: var(--white);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+/* Divider */
+.divider {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  padding: clamp(3rem, 6vw, 5rem) 2rem;
+}
+
+.divider-line {
+  width: 60px;
+  height: 1px;
+  background: var(--gold);
+  margin: 0 auto;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 3rem 2rem;
+  border-top: 1px solid rgba(200, 164, 94, 0.1);
+}
+
+footer p {
+  font-size: 0.78rem;
+  color: var(--text-light);
+  font-weight: 300;
+}
+
+footer a {
+  color: var(--gold);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+footer a:hover { color: var(--gold-dark); }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .mobile-toggle { display: flex; }
+  
+  .nav-links.active {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(250, 247, 242, 0.97);
+    backdrop-filter: blur(20px);
+    padding: 2rem;
+    gap: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  }
+  
+  .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .services-grid { grid-template-columns: 1fr; }
+  .hours-container { grid-template-columns: 1fr; gap: 2rem; }
+  .contact-grid { grid-template-columns: 1fr; }
+  
+  .btn-secondary { margin-left: 0; }
+  
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .about-features { grid-template-columns: 1fr; }
+}
+</style>
+
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.158.0/build/three.module.js"}}</script>
+</head>
+<body>
+
+<canvas id="three-canvas"></canvas>
+
+<!-- Navigation -->
+<nav id="navbar">
+  <a href="#" class="nav-brand">THE MODERN WILLOW GLEN</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#hours">Hours</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="tel:+14082759100" class="nav-cta">Book Now</a></li>
+  </ul>
+  <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content" data-aos="fade-up" data-aos-delay="200">
+    <p class="hero-label">San Jose's Contemporary Salon</p>
+    <h1>The Modern<br><em>Willow Glen</em></h1>
+    <p class="hero-tagline">Warm, personalized service in a modern space — where every client's unique beauty is celebrated.</p>
+    <div class="hero-buttons">
+      <a href="tel:+14082759100" class="btn-primary">Call to Book</a>
+      <a href="https://maps.google.com/?q=1355+Lincoln+Ave+San+Jose+CA+95125" target="_blank" class="btn-secondary">Get Directions</a>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- Divider -->
+<div class="divider"><div class="divider-line"></div></div>
+
+<!-- About -->
+<section id="about" class="about">
+  <div class="about-grid">
+    <div class="about-text" data-aos="fade-right">
+      <p class="section-label">Our Story</p>
+      <h2 class="section-title">Beauty That Feels<br>Like Home</h2>
+      <p>Nestled in the heart of Willow Glen on Lincoln Avenue, The Modern is a contemporary salon that blends warm hospitality with cutting-edge technique. We believe every visit should feel personal, intentional, and transformative.</p>
+      <p>Our talented team specializes in color transformations, precision cutting, and styling that celebrates your individual beauty. Whether you're looking for a subtle refresh or a bold reinvention, we create looks that are uniquely, unmistakably you.</p>
+    </div>
+    <div class="about-features" data-aos="fade-left">
+      <div class="feature-card">
+        <div class="feature-icon">✦</div>
+        <h3>Personalized</h3>
+        <p>Every service tailored to your unique style and needs</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">◇</div>
+        <h3>Inclusive</h3>
+        <p>A welcoming space for all hair types and textures</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">○</div>
+        <h3>Modern</h3>
+        <p>Current techniques with timeless sophistication</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">△</div>
+        <h3>Warm</h3>
+        <p>Genuine connection and comfortable atmosphere</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Divider -->
+<div class="divider"><div class="divider-line"></div></div>
+
+<!-- Services -->
+<section id="services" class="services">
+  <p class="section-label" data-aos="fade-up">What We Do</p>
+  <h2 class="section-title" data-aos="fade-up" data-aos-delay="100">Our Expertise</h2>
+  <div class="services-grid">
+    <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+      <div class="service-number">01</div>
+      <h3>Color & Highlights</h3>
+      <p>From sun-kissed balayage to vivid fashion colors, our colorists create stunning transformations that enhance your natural beauty.</p>
+    </div>
+    <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+      <div class="service-number">02</div>
+      <h3>Precision Cuts</h3>
+      <p>Tailored cuts designed to complement your face shape, lifestyle, and personal style — from classic bobs to modern layers.</p>
+    </div>
+    <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+      <div class="service-number">03</div>
+      <h3>Styling & Treatments</h3>
+      <p>Blowouts, special occasion styling, and restorative treatments to keep your hair healthy, vibrant, and camera-ready.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Divider -->
+<div class="divider"><div class="divider-line"></div></div>
+
+<!-- Hours -->
+<section id="hours" class="hours-section">
+  <div class="hours-container">
+    <div data-aos="fade-right">
+      <p class="section-label">Visit Us</p>
+      <h2 class="section-title">Salon Hours</h2>
+      <div class="hours-info">
+        <p>We'd love to see you. Walk-ins are welcome when availability allows, but we recommend booking an appointment to ensure your preferred stylist and time.</p>
+        <a href="tel:+14082759100" class="btn-primary">Call to Book</a>
+      </div>
+    </div>
+    <div class="hours-card" data-aos="fade-left">
+      <div class="hours-row">
+        <span class="hours-day">Monday</span>
+        <span class="hours-time closed">Closed</span>
+      </div>
+      <div class="hours-row">
+        <span class="hours-day">Tuesday</span>
+        <span class="hours-time">10:00 AM – 8:00 PM</span>
+      </div>
+      <div class="hours-row">
+        <span class="hours-day">Wednesday</span>
+        <span class="hours-time">10:00 AM – 8:00 PM</span>
+      </div>
+      <div class="hours-row">
+        <span class="hours-day">Thursday</span>
+        <span class="hours-time">10:00 AM – 8:00 PM</span>
+      </div>
+      <div class="hours-row">
+        <span class="hours-day">Friday</span>
+        <span class="hours-time">10:00 AM – 8:00 PM</span>
+      </div>
+      <div class="hours-row">
+        <span class="hours-day">Saturday</span>
+        <span class="hours-time">9:00 AM – 7:00 PM</span>
+      </div>
+      <div class="hours-row">
+        <span class="hours-day">Sunday</span>
+        <span class="hours-time">10:00 AM – 7:00 PM</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Divider -->
+<div class="divider"><div class="divider-line"></div></div>
+
+<!-- Contact -->
+<section id="contact" class="contact">
+  <p class="section-label" data-aos="fade-up">Get in Touch</p>
+  <h2 class="section-title" data-aos="fade-up" data-aos-delay="100">We'd Love to<br>Hear From You</h2>
+  
+  <div class="contact-grid">
+    <a href="tel:+14082759100" class="contact-card" data-aos="fade-up" data-aos-delay="100">
+      <div class="contact-icon">📞</div>
+      <h3>Call Us</h3>
+      <p>(408) 275-9100</p>
+    </a>
+    <a href="https://maps.google.com/?q=1355+Lincoln+Ave+San+Jose+CA+95125" target="_blank" class="contact-card" data-aos="fade-up" data-aos-delay="200">
+      <div class="contact-icon">📍</div>
+      <h3>Visit Us</h3>
+      <p>1355 Lincoln Ave<br>San Jose, CA 95125</p>
+    </a>
+    <a href="mailto:modern.willowglen@gmail.com" class="contact-card" data-aos="fade-up" data-aos-delay="300">
+      <div class="contact-icon">✉️</div>
+      <h3>Email Us</h3>
+      <p>modern.willowglen@gmail.com</p>
+    </a>
+  </div>
+
+  <div class="contact-buttons" data-aos="fade-up" data-aos-delay="400">
+    <a href="tel:+14082759100" class="btn-primary">Call Now to Book</a>
+    <a href="https://maps.google.com/?q=1355+Lincoln+Ave+San+Jose+CA+95125" target="_blank" class="btn-secondary">Get Directions</a>
+  </div>
+
+  <div class="social-links" data-aos="fade-up" data-aos-delay="500">
+    <a href="https://www.instagram.com/themodern_willowglen/" target="_blank" class="social-link">
+      <span>◆</span> Instagram
+    </a>
+    <a href="https://www.yelp.com/biz/the-modern-willow-glen-san-jose" target="_blank" class="social-link">
+      <span>★</span> Yelp
+    </a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p>© 2024 The Modern Willow Glen. All rights reserved.</p>
+  <p style="margin-top: 0.5rem;">Website built by <a href="https://platter.site" target="_blank">Platter</a></p>
+</footer>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+<script type="module">
+import * as THREE from 'three';
+
+// Scene setup
+const canvas = document.getElementById('three-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+renderer.setClearColor(0x000000, 0);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.z = 18;
+
+// Lighting — warm and luxurious
+const ambientLight = new THREE.AmbientLight(0xFFF5E6, 0.6);
+scene.add(ambientLight);
+
+const light1 = new THREE.PointLight(0xC8A45E, 2.0, 50);
+light1.position.set(8, 8, 10);
+scene.add(light1);
+
+const light2 = new THREE.PointLight(0xE8D5A3, 1.5, 50);
+light2.position.set(-10, -5, 8);
+scene.add(light2);
+
+const light3 = new THREE.PointLight(0xF5E6CC, 1.2, 50);
+light3.position.set(0, 10, -5);
+scene.add(light3);
+
+// Create floating geometric shapes — warm gold, rose gold, cream tones
+const shapes = [];
+
+const materialGold = new THREE.MeshStandardMaterial({
+  color: 0xC8A45E,
+  metalness: 0.6,
+  roughness: 0.3,
+  transparent: true,
+  opacity: 0.45,
+});
+
+const materialRoseGold = new THREE.MeshStandardMaterial({
+  color: 0xD4A574,
+  metalness: 0.5,
+  roughness: 0.35,
+  transparent: true,
+  opacity: 0.35,
+});
+
+const materialCream = new THREE.MeshStandardMaterial({
+  color: 0xF5E6CC,
+  metalness: 0.3,
+  roughness: 0.4,
+  transparent: true,
+  opacity: 0.3,
+});
+
+const materialBlush = new THREE.MeshStandardMaterial({
+  color: 0xE8B4B8,
+  metalness: 0.4,
+  roughness: 0.35,
+  transparent: true,
+  opacity: 0.35,
+});
+
+const materialBronze = new THREE.MeshStandardMaterial({
+  color: 0xB8860B,
+  metalness: 0.7,
+  roughness: 0.25,
+  transparent: true,
+  opacity: 0.3,
+});
+
+const materials = [materialGold, materialRoseGold, materialCream, materialBlush, materialBronze];
+
+function createShape(geo, mat, pos, scale, rotSpeed, floatSpeed, floatAmp) {
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.set(pos.x, pos.y, pos.z);
+  mesh.scale.setScalar(scale);
+  scene.add(mesh);
+  shapes.push({
+    mesh,
+    rotSpeed: { x: rotSpeed.x, y: rotSpeed.y, z: rotSpeed.z },
+    floatSpeed,
+    floatAmp,
+    baseY: pos.y,
+    phase: Math.random() * Math.PI * 2,
+  });
+}
+
+// Torus — large, elegant ring
+createShape(
+  new THREE.TorusGeometry(2.5, 0.6, 32, 64),
+  materialGold,
+  { x: -7, y: 3, z: -3 },
+  1,
+  { x: 0.003, y: 0.005, z: 0.001 },
+  0.4,
+  1.2
+);
+
+// Icosahedron — geometric gem
+createShape(
+  new THREE.IcosahedronGeometry(2, 0),
+  materialRoseGold,
+  { x: 8, y: -2, z: -5 },
+  1,
+  { x: 0.004, y: 0.003, z: 0.002 },
+  0.3,
+  1.5
+);
+
+// Octahedron — diamond-like
+createShape(
+  new THREE.OctahedronGeometry(1.8, 0),
+  materialBlush,
+  { x: -3, y: -5, z: -2 },
+  1,
+  { x: 0.002, y: 0.006, z: 0.003 },
+  0.5,
+  0.8
+);
+
+// Small torus knot
+createShape(
+  new THREE.TorusKnotGeometry(1.2, 0.35, 100, 16),
+  materialBronze,
+  { x: 6, y: 5, z: -6 },
+  1,
+  { x: 0.005, y: 0.002, z: 0.004 },
+  0.35,
+  1.0
+);
+
+// Dodecahedron
+createShape(
+  new THREE.DodecahedronGeometry(1.5, 0),
+  materialCream,
+  { x: -9, y: -3, z: -7 },
+  1,
+  { x: 0.003, y: 0.004, z: 0.002 },
+  0.25,
+  1.3
+);
+
+// Sphere — soft accent
+createShape(
+  new THREE.SphereGeometry(1.8, 32, 32),
+  materialGold,
+  { x: 10, y: 2, z: -8 },
+  1,
+  { x: 0.001, y: 0.003, z: 0.002 },
+  0.2,
+  0.9
+);
+
+// Additional smaller floating shapes for depth
+createShape(
+  new THREE.TetrahedronGeometry(1, 0),
+  materialRoseGold,
+  { x: 3, y: 7, z: -4 },
+  1,
+  { x: 0.006, y: 0.003, z: 0.004 },
+  0.45,
+  0.7
+);
+
+createShape(
+  new THREE.TorusGeometry(1.2, 0.3, 16, 32),
+  materialCream,
+  { x: -5, y: 6, z: -6 },
+  1,
+  { x: 0.002, y: 0.005, z: 0.003 },
+  0.35,
+  1.1
+);
+
+// Gentle floating particles
+const particleCount = 60;
+const particleGeometry = new THREE.BufferGeometry();
+const positions = new Float32Array(particleCount * 3);
+const particleSizes = new Float32Array(particleCount);
+
+for (let i = 0; i < particleCount; i++) {
+  positions[i * 3] = (Math.random() - 0.5) * 35;
+  positions[i * 3 + 1] = (Math.random() - 0.5) * 25;
+  positions[i * 3 + 2] = (Math.random() - 0.5) * 20 - 5;
+  particleSizes[i] = Math.random() * 3 + 1.5;
+}
+
+particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+particleGeometry.setAttribute('size', new THREE.BufferAttribute(particleSizes, 1));
+
+const particleMaterial = new THREE.PointsMaterial({
+  color: 0xC8A45E,
+  size: 2.5,
+  transparent: true,
+  opacity: 0.2,
+  sizeAttenuation: true,
+});
+
+const particles = new THREE.Points(particleGeometry, particleMaterial);
+scene.add(particles);
+
+// Mouse interaction
+let mouseX = 0, mouseY = 0;
+document.addEventListener('mousemove', (e) => {
+  mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+  mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+});
+
+// Animation loop
+const clock = new THREE.Clock();
+
+function animate() {
+  requestAnimationFrame(animate);
+  const elapsed = clock.getElapsedTime();
+
+  // Animate shapes
+  shapes.forEach((s) => {
+    s.mesh.rotation.x += s.rotSpeed.x;
+    s.mesh.rotation.y += s.rotSpeed.y;
+    s.mesh.rotation.z += s.rotSpeed.z;
+    s.mesh.position.y = s.baseY + Math.sin(elapsed * s.floatSpeed + s.phase) * s.floatAmp;
+  });
+
+  // Particles gentle drift
+  const posArr = particles.geometry.attributes.position.array;
+  for (let i = 0; i < particleCount; i++) {
+    posArr[i * 3 + 1] += Math.sin(elapsed * 0.2 + i) * 0.003;
+  }
+  particles.geometry.attributes.position.needsUpdate = true;
+  particles.rotation.y = elapsed * 0.015;
+
+  // Camera subtle response to mouse
+  camera.position.x += (mouseX * 1.5 - camera.position.x) * 0.02;
+  camera.position.y += (-mouseY * 1.0 - camera.position.y) * 0.02;
+  camera.lookAt(0, 0, -2);
+
+  renderer.render(scene, camera);
+}
+
+animate();
+
+// Resize handler
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// Scroll-based parallax for shapes
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  const factor = scrollY * 0.003;
+  shapes.forEach((s, i) => {
+    s.mesh.position.y = s.baseY - factor * (i % 2 === 0 ? 1 : -0.5);
+  });
+});
+</script>
+
+<script>
+// Initialize AOS
+AOS.init({ duration: 800, once: true, offset: 100 });
+
+// Navbar scroll effect
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 50) {
+    navbar.classList.add('scrolled');
+  } else {
+    navbar.classList.remove('scrolled');
+  }
+});
+
+// Mobile menu toggle
+const mobileToggle = document.getElementById('mobileToggle');
+const navLinks = document.getElementById('navLinks');
+
+mobileToggle.addEventListener('click', () => {
+  navLinks.classList.toggle('active');
+});
+
+// Close mobile menu on link click
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    navLinks.classList.remove('active');
+  });
+});
+</script>
+
+</body>
+</html>

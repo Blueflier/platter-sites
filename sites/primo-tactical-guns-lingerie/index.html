@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Primo Tactical — Guns & Lingerie</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #faf7f4;
+  --text: #1a1a1a;
+  --text-light: #5a5a5a;
+  --accent: #c2185b;
+  --accent-hover: #a01348;
+  --gold: #d4a853;
+  --warm: #f5ebe0;
+  --card-bg: rgba(255,255,255,0.82);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+#bg-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: clamp(12px, 2vw, 20px) clamp(20px, 5vw, 80px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(250,247,244,0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+
+nav.scrolled {
+  box-shadow: 0 2px 30px rgba(0,0,0,0.06);
+}
+
+.nav-brand {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: 0.5px;
+}
+
+.nav-brand span { color: var(--accent); }
+
+.nav-links {
+  display: flex;
+  gap: clamp(16px, 3vw, 32px);
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-light);
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: color 0.3s;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 2px;
+  background: var(--accent);
+  transition: width 0.3s;
+}
+
+.nav-links a:hover { color: var(--accent); }
+.nav-links a:hover::after { width: 100%; }
+
+section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(80px, 10vw, 140px) clamp(20px, 5vw, 80px);
+}
+
+.hero-section {
+  text-align: center;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.hero-overline {
+  font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: var(--accent);
+  opacity: 0.9;
+}
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem, 8vw, 6.5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  color: var(--text);
+  max-width: 900px;
+}
+
+.hero-title .ampersand {
+  color: var(--gold);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.hero-tagline {
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  color: var(--text-light);
+  max-width: 560px;
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 44px;
+  background: var(--accent);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 60px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 8px 32px rgba(194,24,91,0.3);
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(194,24,91,0.4);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 38px;
+  background: transparent;
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 60px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: all 0.35s;
+  border: 2px solid rgba(0,0,0,0.15);
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.about-section {
+  flex-direction: column;
+  gap: 60px;
+  min-height: auto;
+  padding-top: clamp(100px, 12vw, 160px);
+  padding-bottom: clamp(100px, 12vw, 160px);
+}
+
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: var(--accent);
+  text-align: center;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+  max-width: 1100px;
+  width: 100%;
+}
+
+.about-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 20px;
+  padding: clamp(32px, 4vw, 48px);
+  box-shadow: 0 4px 30px rgba(0,0,0,0.04);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.about-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+}
+
+.about-card .icon {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+}
+
+.icon-rose { background: rgba(194,24,91,0.1); color: var(--accent); }
+.icon-gold { background: rgba(212,168,83,0.15); color: var(--gold); }
+.icon-dark { background: rgba(26,26,26,0.08); color: var(--text); }
+
+.about-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.about-card p {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.hours-section {
+  flex-direction: column;
+  gap: 48px;
+  min-height: auto;
+  padding-top: clamp(80px, 10vw, 120px);
+  padding-bottom: clamp(80px, 10vw, 120px);
+  background: var(--warm);
+}
+
+.hours-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 20px;
+  padding: clamp(36px, 5vw, 56px);
+  box-shadow: 0 4px 30px rgba(0,0,0,0.04);
+  max-width: 520px;
+  width: 100%;
+  text-align: center;
+}
+
+.hours-card h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  margin-bottom: 8px;
+}
+
+.hours-card .note {
+  font-size: 0.85rem;
+  color: var(--accent);
+  font-weight: 500;
+  margin-bottom: 28px;
+}
+
+.hours-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hours-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  font-size: 0.95rem;
+}
+
+.hours-list li .day { font-weight: 500; }
+.hours-list li .time { color: var(--text-light); }
+.hours-list li.open .time { color: var(--accent); font-weight: 600; }
+
+.contact-section {
+  flex-direction: column;
+  gap: 48px;
+  min-height: auto;
+  padding-top: clamp(100px, 12vw, 160px);
+  padding-bottom: clamp(100px, 12vw, 160px);
+}
+
+.contact-content {
+  text-align: center;
+  max-width: 600px;
+}
+
+.contact-content h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: 16px;
+}
+
+.contact-content p {
+  color: var(--text-light);
+  font-size: 1.05rem;
+  margin-bottom: 32px;
+  line-height: 1.7;
+}
+
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+.contact-details a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.contact-details a:hover { color: var(--accent); }
+
+.contact-buttons {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.yelp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  padding: 10px 22px;
+  background: #d32323;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 60px;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.yelp-badge:hover {
+  background: #b91c1c;
+  transform: translateY(-2px);
+}
+
+footer {
+  text-align: center;
+  padding: 40px 20px;
+  background: var(--warm);
+  border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+footer p {
+  font-size: 0.8rem;
+  color: var(--text-light);
+}
+
+footer a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+footer a:hover { text-decoration: underline; }
+
+.divider {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--gold));
+  border-radius: 2px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  section { padding-left: 20px; padding-right: 20px; }
+  .about-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<nav id="navbar">
+  <a href="#hero" class="nav-brand">PRIMO <span>&</span> TACTICAL</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#hours">Hours</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero-section" id="hero">
+  <div data-aos="fade-down" data-aos-delay="100">
+    <p class="hero-overline">Walnut Creek, California</p>
+  </div>
+  <h1 class="hero-title" data-aos="fade-up" data-aos-delay="200">
+    Primo Tactical<br>Guns <span class="ampersand">&</span> Lingerie
+  </h1>
+  <p class="hero-tagline" data-aos="fade-up" data-aos-delay="400">
+    An unconventional pairing, an unforgettable experience. Precision meets elegance under one roof.
+  </p>
+  <div class="hero-buttons" data-aos="fade-up" data-aos-delay="600">
+    <a href="tel:+16509317653" class="btn-primary">📞 Call Now</a>
+    <a href="#about" class="btn-secondary">Discover More</a>
+  </div>
+</section>
+
+<section class="about-section" id="about">
+  <div class="section-label" data-aos="fade-up">The Experience</div>
+  <div class="divider" data-aos="fade-up" data-aos-delay="100"></div>
+  <div class="about-grid">
+    <div class="about-card" data-aos="fade-up" data-aos-delay="150">
+      <div class="icon icon-dark">🎯</div>
+      <h3>Tactical Precision</h3>
+      <p>Curated selection of firearms and tactical gear, chosen with the discerning enthusiast in mind. Quality, reliability, and expert guidance every visit.</p>
+    </div>
+    <div class="about-card" data-aos="fade-up" data-aos-delay="250">
+      <div class="icon icon-rose">✨</div>
+      <h3>Refined Elegance</h3>
+      <p>Luxury lingerie that celebrates confidence and sophistication. An intimate, boutique shopping experience crafted for those who appreciate the finer things.</p>
+    </div>
+    <div class="about-card" data-aos="fade-up" data-aos-delay="350">
+      <div class="icon icon-gold">⭐</div>
+      <h3>Standout Reputation</h3>
+      <p>Proudly recognized on Yelp for exceptional service and a one-of-a-kind concept. Limited hours make every visit feel exclusive and intentional.</p>
+    </div>
+  </div>
+</section>
+
+<section class="hours-section" id="hours">
+  <div class="section-label" data-aos="fade-up">Visit Us</div>
+  <div class="divider" data-aos="fade-up" data-aos-delay="100"></div>
+  <div class="hours-card" data-aos="fade-up" data-aos-delay="200">
+    <h2>Business Hours</h2>
+    <p class="note">Exclusive Limited Hours</p>
+    <ul class="hours-list">
+      <li><span class="day">Monday</span><span class="time">Closed</span></li>
+      <li class="open"><span class="day">Tuesday</span><span class="time">5:00 – 6:00 PM</span></li>
+      <li class="open"><span class="day">Wednesday</span><span class="time">5:00 – 6:00 PM</span></li>
+      <li class="open"><span class="day">Thursday</span><span class="time">5:00 – 6:00 PM</span></li>
+      <li><span class="day">Friday</span><span class="time">Closed</span></li>
+      <li><span class="day">Saturday</span><span class="time">Closed</span></li>
+      <li><span class="day">Sunday</span><span class="time">Closed</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="contact-section" id="contact">
+  <div class="section-label" data-aos="fade-up">Get In Touch</div>
+  <div class="divider" data-aos="fade-up" data-aos-delay="100"></div>
+  <div class="contact-content" data-aos="fade-up" data-aos-delay="200">
+    <h2>Come Experience It</h2>
+    <p>Whether you're shopping for tactical gear or luxury lingerie, we'd love to welcome you. Call ahead — our exclusive hours go fast.</p>
+    <div class="contact-details">
+      <a href="tel:+16509317653">📞 (650) 931-7653</a>
+      <a href="https://www.google.com/maps/search/?api=1&query=1617+N+Broadway+Walnut+Creek+CA+94596" target="_blank" rel="noopener">📍 1617 N Broadway, Walnut Creek, CA 94596</a>
+    </div>
+    <div class="contact-buttons">
+      <a href="tel:+16509317653" class="btn-primary">📞 Call Now</a>
+      <a href="https://www.google.com/maps/search/?api=1&query=1617+N+Broadway+Walnut+Creek+CA+94596" target="_blank" rel="noopener" class="btn-secondary">Get Directions</a>
+    </div>
+    <a href="https://www.yelp.com/biz/primo-tactical-guns-and-lingerie-walnut-creek-2" target="_blank" rel="noopener" class="yelp-badge">★ See Our Yelp Reviews</a>
+  </div>
+</section>
+
+<footer>
+  <p>© 2024 Primo Tactical Guns & Lingerie · <a href="https://platter.site" target="_blank" rel="noopener">Website built by Platter</a></p>
+</footer>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.158.0/build/three.module.js"}}</script>
+
+<script type="module">
+import * as THREE from 'three';
+
+const canvas = document.getElementById('bg-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+renderer.setClearColor(0x000000, 0);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.z = 18;
+
+// Lights — warm sophisticated palette
+const ambientLight = new THREE.AmbientLight(0xfff0e6, 0.9);
+scene.add(ambientLight);
+
+const light1 = new THREE.PointLight(0xc2185b, 2.0, 50);
+light1.position.set(8, 8, 10);
+scene.add(light1);
+
+const light2 = new THREE.PointLight(0xd4a853, 1.8, 50);
+light2.position.set(-10, -5, 8);
+scene.add(light2);
+
+const light3 = new THREE.DirectionalLight(0xffe0f0, 1.2);
+light3.position.set(0, 10, 5);
+scene.add(light3);
+
+// Create shapes — refined geometric forms
+const shapes = [];
+
+// Rose gold torus
+const torusMat = new THREE.MeshPhongMaterial({
+  color: 0xc2185b,
+  shininess: 120,
+  specular: 0xffd4e8,
+  transparent: true,
+  opacity: 0.7,
+});
+const torus = new THREE.Mesh(new THREE.TorusGeometry(2.8, 0.7, 24, 80), torusMat);
+torus.position.set(-7, 3, -3);
+scene.add(torus);
+shapes.push({ mesh: torus, rotSpeed: { x: 0.003, y: 0.005 }, floatSpeed: 0.8, floatAmp: 1.2, baseY: 3 });
+
+// Gold octahedron
+const octMat = new THREE.MeshPhongMaterial({
+  color: 0xd4a853,
+  shininess: 150,
+  specular: 0xfff4d4,
+  transparent: true,
+  opacity: 0.65,
+});
+const octahedron = new THREE.Mesh(new THREE.OctahedronGeometry(2.2, 0), octMat);
+octahedron.position.set(8, -2, -5);
+scene.add(octahedron);
+shapes.push({ mesh: octahedron, rotSpeed: { x: 0.004, y: 0.003 }, floatSpeed: 0.6, floatAmp: 1.5, baseY: -2 });
+
+// Deep rose icosahedron
+const icoMat = new THREE.MeshPhongMaterial({
+  color: 0xe91e6c,
+  shininess: 100,
+  specular: 0xffb8d4,
+  transparent: true,
+  opacity: 0.55,
+});
+const icosahedron = new THREE.Mesh(new THREE.IcosahedronGeometry(1.8, 0), icoMat);
+icosahedron.position.set(-3, -5, -4);
+scene.add(icosahedron);
+shapes.push({ mesh: icosahedron, rotSpeed: { x: 0.005, y: 0.004 }, floatSpeed: 1.0, floatAmp: 1.0, baseY: -5 });
+
+// Warm cream sphere
+const sphereMat = new THREE.MeshPhongMaterial({
+  color: 0xf5c6a8,
+  shininess: 80,
+  specular: 0xffeedd,
+  transparent: true,
+  opacity: 0.5,
+});
+const sphere = new THREE.Mesh(new THREE.SphereGeometry(1.5, 32, 32), sphereMat);
+sphere.position.set(4, 5, -6);
+scene.add(sphere);
+shapes.push({ mesh: sphere, rotSpeed: { x: 0.002, y: 0.003 }, floatSpeed: 0.7, floatAmp: 0.9, baseY: 5 });
+
+// Small accent torus knot
+const knotMat = new THREE.MeshPhongMaterial({
+  color: 0x9c27b0,
+  shininess: 130,
+  specular: 0xf0d0ff,
+  transparent: true,
+  opacity: 0.5,
+});
+const knot = new THREE.Mesh(new THREE.TorusKnotGeometry(1.2, 0.35, 80, 16, 2, 3), knotMat);
+knot.position.set(1, 0, -8);
+scene.add(knot);
+shapes.push({ mesh: knot, rotSpeed: { x: 0.003, y: 0.002 }, floatSpeed: 0.5, floatAmp: 1.8, baseY: 0 });
+
+// Subtle particle field
+const particleCount = 120;
+const positions = new Float32Array(particleCount * 3);
+const colors = new Float32Array(particleCount * 3);
+const palette = [
+  new THREE.Color(0xc2185b),
+  new THREE.Color(0xd4a853),
+  new THREE.Color(0xe91e6c),
+  new THREE.Color(0xf5c6a8),
+  new THREE.Color(0x9c27b0),
+];
+
+for (let i = 0; i < particleCount; i++) {
+  positions[i * 3] = (Math.random() - 0.5) * 40;
+  positions[i * 3 + 1] = (Math.random() - 0.5) * 30;
+  positions[i * 3 + 2] = (Math.random() - 0.5) * 20 - 5;
+  const c = palette[Math.floor(Math.random() * palette.length)];
+  colors[i * 3] = c.r;
+  colors[i * 3 + 1] = c.g;
+  colors[i * 3 + 2] = c.b;
+}
+
+const particleGeo = new THREE.BufferGeometry();
+particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+particleGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+const particleMat = new THREE.PointsMaterial({
+  size: 3,
+  vertexColors: true,
+  transparent: true,
+  opacity: 0.35,
+  sizeAttenuation: true,
+});
+
+const particles = new THREE.Points(particleGeo, particleMat);
+scene.add(particles);
+
+// Mouse parallax
+let mouseX = 0, mouseY = 0;
+document.addEventListener('mousemove', (e) => {
+  mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+  mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+});
+
+// Animation
+const clock = new THREE.Clock();
+
+function animate() {
+  requestAnimationFrame(animate);
+  const t = clock.getElapsedTime();
+
+  shapes.forEach(s => {
+    s.mesh.rotation.x += s.rotSpeed.x;
+    s.mesh.rotation.y += s.rotSpeed.y;
+    s.mesh.position.y = s.baseY + Math.sin(t * s.floatSpeed) * s.floatAmp;
+  });
+
+  particles.rotation.y = t * 0.02;
+  particles.rotation.x = t * 0.01;
+
+  // Smooth camera parallax
+  camera.position.x += (mouseX * 2 - camera.position.x) * 0.02;
+  camera.position.y += (-mouseY * 1.5 - camera.position.y) * 0.02;
+  camera.lookAt(0, 0, 0);
+
+  renderer.render(scene, camera);
+}
+animate();
+
+// Resize
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// Nav scroll effect
+const nav = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 50) {
+    nav.classList.add('scrolled');
+  } else {
+    nav.classList.remove('scrolled');
+  }
+});
+</script>
+
+<script>
+AOS.init({ duration: 800, once: true });
+</script>
+
+</body>
+</html>

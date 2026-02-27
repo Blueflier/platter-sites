@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jade Blossom Nail Spa | Luxury Nail Care in Japantown</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+    <style>
+        :root {
+            --color-jade: #0a5c36;
+            --color-sage: #8a9b6e;
+            --color-stone: #e8e6e1;
+            --color-charcoal: #2a2a2a;
+            --color-gold: #b8a26c;
+            --color-white: #fefefe;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            color: var(--color-charcoal);
+            background-color: var(--color-white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        h1, h2, h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 500;
+            line-height: 1.2;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        section {
+            padding: 5rem 0;
+        }
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(232, 230, 225, 0.95) 0%, rgba(138, 155, 110, 0.05) 100%), url('https://images.unsplash.com/photo-1607779097330-9b6bdefa1c82?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            position: relative;
+            color: var(--color-charcoal);
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, transparent 30%, rgba(255,255,255,0.4) 100%);
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+        }
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            margin-bottom: 1rem;
+            color: var(--color-jade);
+            letter-spacing: 1px;
+        }
+        .hero .tagline {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 300;
+            color: var(--color-sage);
+            margin-bottom: 2.5rem;
+            font-style: italic;
+        }
+        .divider {
+            width: 120px;
+            height: 1px;
+            background-color: var(--color-gold);
+            margin: 2rem auto;
+            opacity: 0.6;
+        }
+        /* About */
+        .about {
+            background-color: var(--color-stone);
+            position: relative;
+        }
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        @media (max-width: 768px) {
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+        .about-text h2 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            color: var(--color-jade);
+            margin-bottom: 1.5rem;
+        }
+        .about-text p {
+            font-size: clamp(1rem, 2vw, 1.125rem);
+            margin-bottom: 1.5rem;
+        }
+        .about-image {
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+            height: 400px;
+            background: url('https://images.unsplash.com/photo-1604654894610-df63bc536371?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
+        }
+        /* Contact */
+        .contact {
+            background-color: var(--color-white);
+            text-align: center;
+        }
+        .contact h2 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            color: var(--color-jade);
+            margin-bottom: 3rem;
+        }
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 4rem;
+            margin-top: 3rem;
+        }
+        .contact-item {
+            flex: 1;
+            min-width: 250px;
+            padding: 2rem;
+            background: rgba(232, 230, 225, 0.4);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(138, 155, 110, 0.1);
+            transition: all 0.3s ease;
+        }
+        .contact-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -10px rgba(10, 92, 54, 0.1);
+            border-color: var(--color-sage);
+        }
+        .contact-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--color-gold);
+        }
+        .contact-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--color-charcoal);
+        }
+        .contact-item a, .contact-item p {
+            color: var(--color-charcoal);
+            text-decoration: none;
+            font-size: 1.125rem;
+            transition: color 0.3s ease;
+        }
+        .contact-item a:hover {
+            color: var(--color-jade);
+        }
+        /* Footer */
+        footer {
+            background-color: var(--color-charcoal);
+            color: var(--color-stone);
+            padding: 3rem 0;
+            text-align: center;
+        }
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .footer-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            color: var(--color-white);
+            font-weight: 500;
+        }
+        .copyright {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        .credit {
+            font-size: 0.85rem;
+            opacity: 0.6;
+            margin-top: 1rem;
+        }
+        .credit a {
+            color: var(--color-gold);
+            text-decoration: none;
+        }
+        .credit a:hover {
+            text-decoration: underline;
+        }
+        /* Utility */
+        .btn {
+            display: inline-block;
+            background-color: var(--color-jade);
+            color: var(--color-white);
+            padding: 1rem 2.5rem;
+            border-radius: 0;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            border: 1px solid var(--color-jade);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: transparent;
+            color: var(--color-jade);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <header class="hero" id="home">
+        <div class="hero-content container" data-aos="fade-up">
+            <h1>Jade Blossom</h1>
+            <div class="tagline">Nail Spa</div>
+            <div class="divider"></div>
+            <p style="font-size: 1.25rem; max-width: 600px; margin: 0 auto 2.5rem;">An oasis of tranquility in the heart of Japantown, where luxury meets meticulous artistry.</p>
+            <a href="#contact" class="btn">Book Your Experience</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="about" id="about">
+            <div class="container">
+                <div class="about-content">
+                    <div class="about-text" data-aos="fade-right">
+                        <h2>Serenity & Craftsmanship</h2>
+                        <p>Welcome to Jade Blossom Nail Spa, an upscale sanctuary nestled in the vibrant heart of Japantown. We are dedicated to providing an unparalleled experience of luxury and relaxation.</p>
+                        <p>Our zen-inspired ambiance is designed to soothe the senses from the moment you enter. Each service, from our signature luxury gel manicures to our rejuvenating spa pedicures, is performed with meticulous attention to detail and the finest quality products.</p>
+                        <p>Our artists are passionate about transforming nails into delicate works of art, ensuring every visit leaves you feeling polished, pampered, and perfectly at peace.</p>
+                    </div>
+                    <div class="about-image" data-aos="fade-left" data-aos-delay="200"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact" id="contact">
+            <div class="container">
+                <h2 data-aos="fade-up">Visit Our Sanctuary</h2>
+                <div class="contact-info">
+                    <div class="contact-item" data-aos="zoom-in" data-aos-delay="100">
+                        <div class="contact-icon">📍</div>
+                        <h3>Our Address</h3>
+                        <a href="https://maps.google.com/?q=1581+Webster+St,+San+Francisco,+CA+94115" target="_blank" rel="noopener">
+                            <p>1581 Webster St<br>San Francisco, CA 94115</p>
+                        </a>
+                    </div>
+                    <div class="contact-item" data-aos="zoom-in" data-aos-delay="200">
+                        <div class="contact-icon">📞</div>
+                        <h3>Call Us</h3>
+                        <a href="tel:+14155550888">
+                            <p>(415) 555-0888</p>
+                        </a>
+                    </div>
+                    <div class="contact-item" data-aos="zoom-in" data-aos-delay="300">
+                        <div class="contact-icon">✨</div>
+                        <h3>Services</h3>
+                        <p>Luxury Gel Manicures<br>Spa Pedicures<br>Nail Art & Design</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">Jade Blossom Nail Spa</div>
+                <p class="copyright">© 2023 Jade Blossom Nail Spa. All rights reserved.</p>
+                <p class="credit">Website built by <a href="https://platter.site" target="_blank" rel="noopener">Platter</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+    </script>
+</body>
+</html>

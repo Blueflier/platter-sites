@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jade Blossom Nail Spa | Luxury Nail Care in Japantown</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Mulish:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<style>
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --jade: #6B9E8A;
+  --jade-deep: #4A7A66;
+  --jade-light: #A8D5BA;
+  --pink-soft: #F2D4D7;
+  --pink-blush: #E8B4B8;
+  --pink-deep: #D4919A;
+  --cream: #FFF8F0;
+  --dark: #1A1A2E;
+  --dark-surface: rgba(26, 26, 46, 0.75);
+  --glass: rgba(26, 26, 46, 0.45);
+  --glass-border: rgba(168, 213, 186, 0.15);
+  --text-primary: #F2EDE8;
+  --text-secondary: rgba(242, 237, 232, 0.7);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Mulish', sans-serif;
+  background-color: var(--dark);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+#three-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.page-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+/* Typography */
+h1, h2, h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+/* Navigation */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  padding: clamp(1rem, 3vw, 1.5rem) clamp(1.5rem, 5vw, 4rem);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.4s ease, backdrop-filter 0.4s ease;
+}
+
+nav.scrolled {
+  background: rgba(26, 26, 46, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  font-weight: 400;
+  color: var(--jade-light);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+}
+
+.nav-logo span {
+  color: var(--pink-blush);
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--jade-light);
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: var(--jade-light);
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+/* Hero */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: clamp(2rem, 5vw, 6rem) clamp(1.5rem, 5vw, 4rem);
+  position: relative;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 0.4rem 1.5rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 50px;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--jade-light);
+  margin-bottom: 2rem;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.hero h1 {
+  font-size: clamp(3rem, 8vw, 7rem);
+  line-height: 1.05;
+  margin-bottom: 1.5rem;
+  color: var(--cream);
+}
+
+.hero h1 .accent {
+  color: var(--jade-light);
+  font-style: italic;
+}
+
+.hero-tagline {
+  font-size: clamp(1rem, 2.5vw, 1.35rem);
+  color: var(--text-secondary);
+  max-width: 550px;
+  margin-bottom: 2.5rem;
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.hero-divider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--jade-light), transparent);
+  margin: 0 auto 2.5rem;
+}
+
+.cta-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: clamp(0.9rem, 2vw, 1.1rem) clamp(2rem, 4vw, 2.8rem);
+  background: linear-gradient(135deg, var(--jade-deep), var(--jade));
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  font-family: 'Mulish', sans-serif;
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: all 0.4s ease;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 25px rgba(107, 158, 138, 0.35);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 35px rgba(107, 158, 138, 0.5);
+  background: linear-gradient(135deg, var(--jade), var(--jade-light));
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: clamp(0.9rem, 2vw, 1.1rem) clamp(2rem, 4vw, 2.8rem);
+  background: transparent;
+  color: var(--pink-blush);
+  text-decoration: none;
+  border-radius: 50px;
+  font-family: 'Mulish', sans-serif;
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: all 0.4s ease;
+  border: 1px solid var(--pink-blush);
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: rgba(232, 180, 184, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(232, 180, 184, 0.2);
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  animation: float 3s ease-in-out infinite;
+}
+
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--jade-light), transparent);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* Sections */
+section {
+  padding: clamp(4rem, 10vw, 8rem) clamp(1.5rem, 5vw, 4rem);
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+.section-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--jade-light);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.section-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: var(--cream);
+  margin-bottom: 1rem;
+}
+
+.section-line {
+  width: 40px;
+  height: 1px;
+  background: var(--pink-blush);
+  margin: 1.5rem auto 0;
+}
+
+/* About */
+.about-content {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.about-text {
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  color: var(--text-secondary);
+  line-height: 1.9;
+  font-weight: 300;
+}
+
+.about-text em {
+  color: var(--pink-blush);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15em;
+}
+
+/* Services */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(1.5rem, 3vw, 2rem);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.service-card {
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: clamp(2rem, 4vw, 2.5rem);
+  text-align: center;
+  transition: all 0.4s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(168, 213, 186, 0.3);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.service-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1.2rem;
+  display: block;
+}
+
+.service-card h3 {
+  font-size: clamp(1.3rem, 2.5vw, 1.6rem);
+  color: var(--cream);
+  margin-bottom: 0.8rem;
+}
+
+.service-card p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+/* Testimonial */
+.testimonial-section {
+  background: linear-gradient(135deg, rgba(107, 158, 138, 0.08), rgba(232, 180, 184, 0.05));
+  border-top: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.testimonial-card {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.testimonial-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+  font-style: italic;
+  color: var(--cream);
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  font-weight: 300;
+}
+
+.testimonial-quote::before {
+  content: '\201C';
+  font-size: 3rem;
+  color: var(--jade-light);
+  display: block;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.testimonial-author {
+  color: var(--pink-blush);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Contact */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: clamp(2rem, 4vw, 3rem);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.contact-item {
+  display: flex;
+  gap: 1.2rem;
+  align-items: flex-start;
+}
+
+.contact-icon {
+  width: 50px;
+  height: 50px;
+  min-width: 50px;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+.contact-item-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--jade-light);
+  margin-bottom: 0.3rem;
+}
+
+.contact-item-value {
+  color: var(--cream);
+  font-size: 1.05rem;
+}
+
+.contact-item-value a {
+  color: var(--cream);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.contact-item-value a:hover {
+  color: var(--jade-light);
+}
+
+.contact-cta {
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: clamp(2rem, 5vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1.5rem;
+}
+
+.contact-cta h3 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  color: var(--cream);
+}
+
+.contact-cta p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  max-width: 350px;
+}
+
+.hours-list {
+  list-style: none;
+  margin-top: 0.5rem;
+}
+
+.hours-list li {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  padding: 0.25rem 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.hours-list li span:last-child {
+  color: var(--cream);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 2.5rem clamp(1.5rem, 5vw, 4rem);
+  border-top: 1px solid var(--glass-border);
+}
+
+.footer-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  color: var(--jade-light);
+  margin-bottom: 0.8rem;
+}
+
+.footer-credit {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.footer-credit a {
+  color: var(--jade-light);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-credit a:hover {
+  color: var(--pink-blush);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+  
+  .hero h1 {
+    font-size: clamp(2.5rem, 10vw, 4rem);
+  }
+  
+  .services-grid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+  }
+  
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hours-list li {
+    gap: 1rem;
+  }
+}
+</style>
+</head>
+<body>
+
+<canvas id="three-canvas"></canvas>
+
+<div class="page-wrapper">
+  
+  <!-- Navigation -->
+  <nav id="navbar">
+    <a href="#" class="nav-logo">Jade <span>Blossom</span></a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <div data-aos="fade-down" data-aos-duration="1000">
+      <span class="hero-badge">✦ Japantown, San Francisco</span>
+    </div>
+    <h1 data-aos="fade-up" data-aos-duration="1200" data-aos-delay="200">
+      Jade<br><span class="accent">Blossom</span>
+    </h1>
+    <div class="hero-divider" data-aos="fade-up" data-aos-delay="400"></div>
+    <p class="hero-tagline" data-aos="fade-up" data-aos-delay="500">
+      Luxury nail care in a serene zen-inspired sanctuary. Where beauty meets tranquility.
+    </p>
+    <div class="cta-group" data-aos="fade-up" data-aos-delay="700">
+      <a href="tel:+14155550888" class="btn-primary">
+        ✆ Call Now — (415) 555-0888
+      </a>
+      <a href="https://www.google.com/maps/search/?api=1&query=1581+Webster+St+San+Francisco+CA+94115" target="_blank" rel="noopener" class="btn-secondary">
+        ↗ Get Directions
+      </a>
+    </div>
+    <div class="scroll-indicator">
+      <span>Discover</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-label">Our Story</span>
+      <h2 class="section-title">A Sanctuary for Self-Care</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="about-content" data-aos="fade-up" data-aos-delay="200">
+      <p class="about-text">
+        Nestled in the heart of San Francisco's Japantown, Jade Blossom Nail Spa is an <em>upscale retreat</em> where meticulous artistry meets deep relaxation. Our zen-inspired ambiance — with warm wood, flowing water, and the delicate scent of botanicals — transforms every visit into a mindful escape.<br><br>
+        We specialize in <em>luxury gel manicures</em>, rejuvenating spa pedicures, and intricate nail art, all performed with an unwavering attention to detail. Every treatment is a moment of beauty, crafted just for you.
+      </p>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-label">What We Offer</span>
+      <h2 class="section-title">Our Services</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="services-grid">
+      <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+        <span class="service-icon">💎</span>
+        <h3>Luxury Gel Manicure</h3>
+        <p>Long-lasting, chip-free perfection with premium gel formulas and expert shaping for flawless hands.</p>
+      </div>
+      <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+        <span class="service-icon">🌸</span>
+        <h3>Spa Pedicure</h3>
+        <p>A deeply restorative experience with botanical soaks, exfoliation, hot stone massage, and precision polish.</p>
+      </div>
+      <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+        <span class="service-icon">🎨</span>
+        <h3>Nail Art</h3>
+        <p>From minimalist elegance to intricate designs — our artists transform nails into wearable masterpieces.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial -->
+  <section class="testimonial-section">
+    <div class="testimonial-card" data-aos="fade-up">
+      <p class="testimonial-quote">
+        The most serene nail experience I've ever had. The attention to detail is extraordinary — my gel manicure lasted three full weeks without a single chip.
+      </p>
+      <p class="testimonial-author">— A Happy Client</p>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-label">Visit Us</span>
+      <h2 class="section-title">Get in Touch</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info" data-aos="fade-up" data-aos-delay="100">
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div>
+            <div class="contact-item-label">Address</div>
+            <div class="contact-item-value">
+              <a href="https://www.google.com/maps/search/?api=1&query=1581+Webster+St+San+Francisco+CA+94115" target="_blank" rel="noopener">
+                1581 Webster St<br>San Francisco, CA 94115
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div>
+            <div class="contact-item-label">Phone</div>
+            <div class="contact-item-value">
+              <a href="tel:+14155550888">(415) 555-0888</a>
+            </div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">🕐</div>
+          <div>
+            <div class="contact-item-label">Hours</div>
+            <ul class="hours-list">
+              <li><span>Mon – Fri</span><span>10:00 AM – 7:30 PM</span></li>
+              <li><span>Saturday</span><span>9:00 AM – 7:00 PM</span></li>
+              <li><span>Sunday</span><span>10:00 AM – 6:00 PM</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="contact-cta" data-aos="fade-up" data-aos-delay="300">
+        <h3>Ready for<br>Your Moment?</h3>
+        <p>Call us to book your appointment and experience the art of mindful nail care.</p>
+        <a href="tel:+14155550888" class="btn-primary">
+          ✆ Book by Phone
+        </a>
+        <a href="https://www.google.com/maps/search/?api=1&query=1581+Webster+St+San+Francisco+CA+94115" target="_blank" rel="noopener" class="btn-secondary">
+          ↗ Get Directions
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-logo">Jade Blossom Nail Spa</div>
+    <p class="footer-credit">Website built by <a href="https://platter.site" target="_blank" rel="noopener">Platter</a></p>
+  </footer>
+
+</div>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.158.0/build/three.module.js"}}</script>
+
+<script type="module">
+import * as THREE from 'three';
+
+// Scene setup
+const canvas = document.getElementById('three-canvas');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.z = 30;
+
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+renderer.setClearColor(0x000000, 0);
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+// Lighting
+const ambientLight = new THREE.AmbientLight(0x6B9E8A, 0.4);
+scene.add(ambientLight);
+
+const directionalLight = new THREE.DirectionalLight(0xF2D4D7, 0.6);
+directionalLight.position.set(5, 10, 7);
+scene.add(directionalLight);
+
+const pointLight = new THREE.PointLight(0xA8D5BA, 0.5, 50);
+pointLight.position.set(-10, 5, 10);
+scene.add(pointLight);
+
+// Particle field - zen floating particles
+const particleCount = 600;
+const particleGeometry = new THREE.BufferGeometry();
+const positions = new Float32Array(particleCount * 3);
+const colors = new Float32Array(particleCount * 3);
+const sizes = new Float32Array(particleCount);
+const velocities = new Float32Array(particleCount * 3);
+
+const jadeColor = new THREE.Color(0xA8D5BA);
+const pinkColor = new THREE.Color(0xF2D4D7);
+const creamColor = new THREE.Color(0xFFF8F0);
+
+for (let i = 0; i < particleCount; i++) {
+  const i3 = i * 3;
+  positions[i3] = (Math.random() - 0.5) * 60;
+  positions[i3 + 1] = (Math.random() - 0.5) * 60;
+  positions[i3 + 2] = (Math.random() - 0.5) * 40 - 5;
+
+  // Random color among jade, pink, cream
+  const colorChoice = Math.random();
+  let color;
+  if (colorChoice < 0.4) color = jadeColor;
+  else if (colorChoice < 0.75) color = pinkColor;
+  else color = creamColor;
+
+  colors[i3] = color.r;
+  colors[i3 + 1] = color.g;
+  colors[i3 + 2] = color.b;
+
+  sizes[i] = Math.random() * 3 + 1;
+
+  velocities[i3] = (Math.random() - 0.5) * 0.003;
+  velocities[i3 + 1] = (Math.random() - 0.5) * 0.003 + 0.002;
+  velocities[i3 + 2] = (Math.random() - 0.5) * 0.002;
+}
+
+particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+particleGeometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+// Custom shader material for soft round particles
+const particleMaterial = new THREE.ShaderMaterial({
+  uniforms: {
+    uTime: { value: 0 },
+    uPixelRatio: { value: renderer.getPixelRatio() }
+  },
+  vertexShader: `
+    attribute float size;
+    attribute vec3 color;
+    varying vec3 vColor;
+    varying float vAlpha;
+    uniform float uTime;
+    uniform float uPixelRatio;
+    
+    void main() {
+      vColor = color;
+      vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+      float dist = length(mvPosition.xyz);
+      vAlpha = smoothstep(40.0, 5.0, dist) * 0.6;
+      gl_PointSize = size * uPixelRatio * (15.0 / -mvPosition.z);
+      gl_Position = projectionMatrix * mvPosition;
+    }
+  `,
+  fragmentShader: `
+    varying vec3 vColor;
+    varying float vAlpha;
+    
+    void main() {
+      float d = length(gl_PointCoord - vec2(0.5));
+      if (d > 0.5) discard;
+      float alpha = smoothstep(0.5, 0.1, d) * vAlpha;
+      gl_FragColor = vec4(vColor, alpha);
+    }
+  `,
+  transparent: true,
+  depthWrite: false,
+  blending: THREE.AdditiveBlending
+});
+
+const particles = new THREE.Points(particleGeometry, particleMaterial);
+scene.add(particles);
+
+// Soft floating geometric shapes
+const shapes = [];
+
+// Torus - jade
+const torusGeometry = new THREE.TorusGeometry(3, 0.4, 16, 48);
+const torusMaterial = new THREE.MeshStandardMaterial({
+  color: 0x6B9E8A,
+  roughness: 0.4,
+  metalness: 0.3,
+  transparent: true,
+  opacity: 0.25,
+  wireframe: true
+});
+const torus = new THREE.Mesh(torusGeometry, torusMaterial);
+torus.position.set(-12, 5, -8);
+scene.add(torus);
+shapes.push({ mesh: torus, rotSpeed: { x: 0.002, y: 0.003, z: 0.001 }, floatOffset: 0 });
+
+// Icosahedron - pink
+const icoGeometry = new THREE.IcosahedronGeometry(2.5, 0);
+const icoMaterial = new THREE.MeshStandardMaterial({
+  color: 0xE8B4B8,
+  roughness: 0.5,
+  metalness: 0.2,
+  transparent: true,
+  opacity: 0.2,
+  wireframe: true
+});
+const ico = new THREE.Mesh(icoGeometry, icoMaterial);
+ico.position.set(14, -4, -10);
+scene.add(ico);
+shapes.push({ mesh: ico, rotSpeed: { x: 0.003, y: 0.002, z: 0.001 }, floatOffset: 2 });
+
+// Octahedron - cream/light
+const octGeometry = new THREE.OctahedronGeometry(2, 0);
+const octMaterial = new THREE.MeshStandardMaterial({
+  color: 0xA8D5BA,
+  roughness: 0.3,
+  metalness: 0.4,
+  transparent: true,
+  opacity: 0.18,
+  wireframe: true
+});
+const oct = new THREE.Mesh(octGeometry, octMaterial);
+oct.position.set(8, 8, -12);
+scene.add(oct);
+shapes.push({ mesh: oct, rotSpeed: { x: 0.001, y: 0.004, z: 0.002 }, floatOffset: 4 });
+
+// Small torus knot
+const knotGeometry = new THREE.TorusKnotGeometry(1.5, 0.3, 64, 8, 2, 3);
+const knotMaterial = new THREE.MeshStandardMaterial({
+  color: 0xD4919A,
+  roughness: 0.5,
+  metalness: 0.2,
+  transparent: true,
+  opacity: 0.15,
+  wireframe: true
+});
+const knot = new THREE.Mesh(knotGeometry, knotMaterial);
+knot.position.set(-8, -8, -6);
+scene.add(knot);
+shapes.push({ mesh: knot, rotSpeed: { x: 0.002, y: 0.001, z: 0.003 }, floatOffset: 1.5 });
+
+// Mouse interaction - subtle parallax
+let mouseX = 0, mouseY = 0;
+let targetMouseX = 0, targetMouseY = 0;
+
+document.addEventListener('mousemove', (e) => {
+  targetMouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+  targetMouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+});
+
+// Animation
+const clock = new THREE.Clock();
+
+function animate() {
+  requestAnimationFrame(animate);
+  
+  const elapsed = clock.getElapsedTime();
+  
+  // Smooth mouse follow
+  mouseX += (targetMouseX - mouseX) * 0.02;
+  mouseY += (targetMouseY - mouseY) * 0.02;
+  
+  // Update camera with subtle parallax
+  camera.position.x = mouseX * 1.5;
+  camera.position.y = -mouseY * 1;
+  camera.lookAt(0, 0, 0);
+  
+  // Update particles
+  particleMaterial.uniforms.uTime.value = elapsed;
+  
+  const posArray = particleGeometry.attributes.position.array;
+  for (let i = 0; i < particleCount; i++) {
+    const i3 = i * 3;
+    posArray[i3] += velocities[i3];
+    posArray[i3 + 1] += velocities[i3 + 1];
+    posArray[i3 + 2] += velocities[i3 + 2];
+    
+    // Gentle sine wave motion
+    posArray[i3] += Math.sin(elapsed * 0.3 + i * 0.1) * 0.002;
+    posArray[i3 + 1] += Math.cos(elapsed * 0.2 + i * 0.05) * 0.002;
+    
+    // Wrap around
+    if (posArray[i3] > 30) posArray[i3] = -30;
+    if (posArray[i3] < -30) posArray[i3] = 30;
+    if (posArray[i3 + 1] > 30) posArray[i3 + 1] = -30;
+    if (posArray[i3 + 1] < -30) posArray[i3 + 1] = 30;
+    if (posArray[i3 + 2] > 20) posArray[i3 + 2] = -25;
+    if (posArray[i3 + 2] < -25) posArray[i3 + 2] = 20;
+  }
+  particleGeometry.attributes.position.needsUpdate = true;
+  
+  // Rotate and float shapes
+  shapes.forEach((s) => {
+    s.mesh.rotation.x += s.rotSpeed.x;
+    s.mesh.rotation.y += s.rotSpeed.y;
+    s.mesh.rotation.z += s.rotSpeed.z;
+    s.mesh.position.y += Math.sin(elapsed * 0.5 + s.floatOffset) * 0.005;
+    s.mesh.position.x += Math.cos(elapsed * 0.3 + s.floatOffset) * 0.003;
+  });
+  
+  renderer.render(scene, camera);
+}
+
+animate();
+
+// Resize
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  particleMaterial.uniforms.uPixelRatio.value = renderer.getPixelRatio();
+});
+
+// Navbar scroll effect
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 50) {
+    navbar.classList.add('scrolled');
+  } else {
+    navbar.classList.remove('scrolled');
+  }
+});
+
+// Init AOS
+AOS.init({
+  duration: 800,
+  once: true,
+  offset: 80
+});
+</script>
+
+</body>
+</html>

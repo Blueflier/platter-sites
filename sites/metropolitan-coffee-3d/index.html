@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metropolitan Coffee — San Francisco</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F5E6D3;
+    --text: #3D2817;
+    --accent: #C85A3A;
+    --accent2: #2C5F7F;
+    --glass: rgba(255,255,255,0.65);
+    --glass-border: rgba(200,90,58,0.18);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+
+  canvas#bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ── Turkish tile pattern overlay ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 25% 25%, rgba(200,90,58,0.06) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, rgba(44,95,127,0.06) 0%, transparent 50%);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* tile SVG pattern */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg stroke='%23C85A3A' stroke-width='0.4' opacity='0.12'%3E%3Cpath d='M30 0 L60 30 L30 60 L0 30Z'/%3E%3Ccircle cx='30' cy='30' r='12'/%3E%3Ccircle cx='30' cy='30' r='6'/%3E%3Cpath d='M30 18 L42 30 L30 42 L18 30Z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.7;
+  }
+
+  section, nav, footer { position: relative; z-index: 2; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 5%;
+    background: rgba(245,230,211,0.82);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(200,90,58,0.15);
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.3rem, 2.5vw, 1.7rem);
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.04em;
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--text);
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.75;
+    transition: opacity 0.2s, color 0.2s;
+  }
+
+  .nav-links a:hover { opacity: 1; color: var(--accent); }
+
+  .nav-cta {
+    background: var(--accent);
+    color: #fff !important;
+    opacity: 1 !important;
+    padding: 0.55rem 1.4rem;
+    border-radius: 50px;
+    font-weight: 600 !important;
+    transition: background 0.2s, transform 0.2s !important;
+  }
+
+  .nav-cta:hover { background: #a8472b !important; transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: clamp(6rem, 12vw, 9rem) 5% clamp(4rem, 8vw, 6rem);
+  }
+
+  .hero-inner { max-width: 780px; }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(200,90,58,0.12);
+    border: 1px solid rgba(200,90,58,0.3);
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 0.4rem 1.1rem;
+    border-radius: 50px;
+    margin-bottom: 1.8rem;
+  }
+
+  .hero-badge::before { content: '☕'; font-size: 0.9rem; }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-weight: 300;
+    line-height: 1.05;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    margin-bottom: 0.3rem;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-weight: 300;
+    color: var(--text);
+    opacity: 0.7;
+    margin-bottom: 2.5rem;
+    font-style: italic;
+    letter-spacing: 0.02em;
+  }
+
+  .hero-desc {
+    font-size: clamp(0.88rem, 1.5vw, 1rem);
+    color: var(--text);
+    opacity: 0.65;
+    max-width: 520px;
+    margin: 0 auto 2.8rem;
+    line-height: 1.75;
+  }
+
+  .btn-group { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--accent);
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0.9rem 2.2rem;
+    border-radius: 50px;
+    letter-spacing: 0.04em;
+    transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+    box-shadow: 0 8px 30px rgba(200,90,58,0.35);
+  }
+
+  .btn-primary:hover {
+    background: #a8472b;
+    transform: translateY(-3px);
+    box-shadow: 0 14px 40px rgba(200,90,58,0.45);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(44,95,127,0.12);
+    color: var(--accent2);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0.9rem 2.2rem;
+    border-radius: 50px;
+    letter-spacing: 0.04em;
+    border: 1.5px solid rgba(44,95,127,0.35);
+    transition: background 0.25s, transform 0.25s;
+  }
+
+  .btn-secondary:hover {
+    background: rgba(44,95,127,0.22);
+    transform: translateY(-3px);
+  }
+
+  .scroll-hint {
+    margin-top: 3.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    opacity: 0.4;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .scroll-hint .arrow {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, transparent, var(--accent));
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(0.8); }
+    50% { opacity: 1; transform: scaleY(1); }
+  }
+
+  /* ── SECTIONS COMMON ── */
+  section { padding: clamp(4rem, 8vw, 7rem) 5%; }
+
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.8rem;
+    display: block;
+  }
+
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4.5vw, 3.2rem);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+  }
+
+  /* ── ABOUT ── */
+  #about { max-width: 1200px; margin: 0 auto; }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .about-text p {
+    font-size: clamp(0.92rem, 1.4vw, 1.05rem);
+    line-height: 1.85;
+    color: var(--text);
+    opacity: 0.8;
+    margin-bottom: 1.2rem;
+  }
+
+  .about-features {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .feature-card {
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 1.3rem 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    box-shadow: 0 4px 20px rgba(61,40,23,0.08);
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 35px rgba(61,40,23,0.13);
+  }
+
+  .feature-icon {
+    font-size: 1.6rem;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(200,90,58,0.12);
+    border-radius: 12px;
+  }
+
+  .feature-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+  }
+
+  .feature-card p {
+    font-size: 0.84rem;
+    color: var(--text);
+    opacity: 0.65;
+    line-height: 1.5;
+  }
+
+  /* ── HOURS ── */
+  #hours {
+    background: rgba(61,40,23,0.04);
+    border-top: 1px solid rgba(200,90,58,0.12);
+    border-bottom: 1px solid rgba(200,90,58,0.12);
+  }
+
+  .hours-inner { max-width: 900px; margin: 0 auto; text-align: center; }
+
+  .hours-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.8rem;
+    margin-top: 2.5rem;
+  }
+
+  .hour-item {
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 1rem 0.7rem;
+    text-align: center;
+    transition: transform 0.2s, background 0.2s;
+  }
+
+  .hour-item:hover { transform: translateY(-3px); background: rgba(255,255,255,0.82); }
+
+  .hour-day {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+
+  .hour-time {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    font-weight: 400;
+  }
+
+  /* ── CONTACT ── */
+  #contact { max-width: 1000px; margin: 0 auto; }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .contact-card {
+    background: var(--glass);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 2rem 2.2rem;
+    box-shadow: 0 8px 35px rgba(61,40,23,0.09);
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .contact-item:last-child { margin-bottom: 0; }
+
+  .contact-icon {
+    width: 42px;
+    height: 42px;
+    background: rgba(200,90,58,0.12);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .contact-item-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .contact-item-value {
+    font-size: 0.95rem;
+    color: var(--text);
+    line-height: 1.5;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  a.contact-item-value:hover { color: var(--accent); }
+
+  .cta-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.2rem;
+  }
+
+  .cta-block h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-block p {
+    font-size: 0.92rem;
+    color: var(--text);
+    opacity: 0.65;
+    line-height: 1.7;
+    margin-bottom: 0.8rem;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 2.5rem 5%;
+    border-top: 1px solid rgba(200,90,58,0.15);
+    background: rgba(61,40,23,0.04);
+  }
+
+  footer p {
+    font-size: 0.8rem;
+    color: var(--text);
+    opacity: 0.5;
+  }
+
+  footer a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    opacity: 1;
+  }
+
+  footer a:hover { text-decoration: underline; }
+
+  /* ── DIVIDER ── */
+  .ornament {
+    text-align: center;
+    color: var(--accent);
+    opacity: 0.4;
+    font-size: 1.2rem;
+    letter-spacing: 0.5rem;
+    margin: 1rem 0 2rem;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .hours-grid { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); }
+    .cta-block { order: -1; }
+  }
+
+  @media (max-width: 480px) {
+    .btn-group { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">Metro<span>politan</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#hours">Hours</a></li>
+    <li><a href="#contact">Visit</a></li>
+    <li><a href="tel:+14159269359" class="nav-cta">Call Us</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">San Francisco, CA</div>
+    <h1>Metro<em>politan</em><br>Coffee</h1>
+    <p class="hero-tagline">Where Istanbul Meets the Bay</p>
+    <p class="hero-desc">A spacious, calm sanctuary on Market Street blending Turkish warmth with San Francisco energy. Perfect for a quick espresso or a long afternoon session.</p>
+    <div class="btn-group">
+      <a href="tel:+14159269359" class="btn-primary">☎ Call Now</a>
+      <a href="https://maps.google.com/?q=720+Market+St,+San+Francisco,+CA+94102" target="_blank" class="btn-secondary">📍 Get Directions</a>
+    </div>
+    <div class="scroll-hint">
+      <span>Explore</span>
+      <div class="arrow"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-text" data-aos="fade-right">
+      <span class="section-label">Our Story</span>
+      <h2>A Café Built for <em style="font-style:italic;color:var(--accent)">Every Moment</em></h2>
+      <div class="ornament">❧ ☕ ❧</div>
+      <p>Metropolitan Coffee brings the rich traditions of Turkish coffee culture to the heart of San Francisco. From hand-crafted espresso drinks to delicate baklava pastries, every detail is infused with warmth and care.</p>
+      <p>Our spacious interior balances lively energy with quiet comfort — whether you're stopping in for a quick cortado or settling in for a full work session, our friendly staff are always here to make it memorable.</p>
+    </div>
+    <div class="about-features" data-aos="fade-left" data-aos-delay="100">
+      <div class="feature-card">
+        <div class="feature-icon">☕</div>
+        <div>
+          <h3>Premium Espresso</h3>
+          <p>Expertly pulled shots, Turkish coffee, and specialty drinks crafted with care every single time.</p>
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🥐</div>
+        <div>
+          <h3>Turkish Pastries</h3>
+          <p>Authentic baklava, börek, and seasonal treats — the perfect companions to your favorite brew.</p>
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🪔</div>
+        <div>
+          <h3>Ambient Atmosphere</h3>
+          <p>Warm lantern lighting, Turkish tile accents, and ample seating for work or relaxed conversation.</p>
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌟</div>
+        <div>
+          <h3>Attentive Service</h3>
+          <p>Consistently friendly staff who know your name and your order, keeping the vibe lively yet calm.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOURS -->
+<section id="hours">
+  <div class="hours-inner" data-aos="fade-up">
+    <span class="section-label">Business Hours</span>
+    <h2>We're Open Every Day</h2>
+    <p style="opacity:0.65; font-size:0.95rem;">From early morning espresso to late afternoon tea — we're here for you.</p>
+    <div class="hours-grid">
+      <div class="hour-item"><span class="hour-day">Mon</span><span class="hour-time">6am – 6pm</span></div>
+      <div class="hour-item"><span class="hour-day">Tue</span><span class="hour-time">6am – 6pm</span></div>
+      <div class="hour-item"><span class="hour-day">Wed</span><span class="hour-time">6am – 6pm</span></div>
+      <div class="hour-item"><span class="hour-day">Thu</span><span class="hour-time">6am – 6pm</span></div>
+      <div class="hour-item"><span class="hour-day">Fri</span><span class="hour-time">6am – 6pm</span></div>
+      <div class="hour-item"><span class="hour-day">Sat</span><span class="hour-time">6am – 6pm</span></div>
+      <div class="hour-item"><span class="hour-day">Sun</span><span class="hour-time">6am – 6pm</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div data-aos="fade-up">
+    <span class="section-label">Visit Us</span>
+    <h2>Find Us on Market Street</h2>
+  </div>
+  <div class="contact-grid" style="margin-top: 2.5rem;">
+    <div class="contact-card" data-aos="fade-right" data-aos-delay="100">
+      <div class="contact-item">
+        <div class="contact-icon">📍</div>
+        <div>
+          <span class="contact-item-label">Address</span>
+          <a href="https://maps.google.com/?q=720+Market+St,+San+Francisco,+CA+94102" target="_blank" class="contact-item-value">720 Market St<br>San Francisco, CA 94102</a>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">☎</div>
+        <div>
+          <span class="contact-item-label">Phone</span>
+          <a href="tel:+14159269359" class="contact-item-value">(415) 926-9359</a>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">🕐</div>
+        <div>
+          <span class="contact-item-label">Hours</span>
+          <span class="contact-item-value">Mon – Sun: 6:00 AM – 6:00 PM</span>
+        </div>
+      </div>
+    </div>
+    <div class="cta-block" data-aos="fade-left" data-aos-delay="150">
+      <h3>Ready for your next great cup?</h3>
+      <p>Drop by our cozy space on Market Street. Whether you need a quick pick-me-up or a place to settle in and work, we'd love to see you.</p>
+      <a href="tel:+14159269359" class="btn-primary" style="width:fit-content;">☎ Call (415) 926-9359</a>
+      <a href="https://maps.google.com/?q=720+Market+St,+San+Francisco,+CA+94102" target="_blank" class="btn-secondary" style="width:fit-content;">📍 Open in Google Maps</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2024 Metropolitan Coffee · 720 Market St, San Francisco, CA · (415) 926-9359</p>
+  <p style="margin-top:0.5rem;">Website built by <a href="https://platter.site" target="_blank">Platter</a></p>
+</footer>
+
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.158.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.158.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+const canvas = document.getElementById('bg');
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x000000, 0);
+renderer.shadowMap.enabled = true;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 200);
+camera.position.set(0, 2, 12);
+camera.lookAt(0, 0, 0);
+
+// ── LIGHTING ──
+const ambientLight = new THREE.AmbientLight(0xF5E6D3, 1.0);
+scene.add(ambientLight);
+
+const warmKey = new THREE.DirectionalLight(0xC85A3A, 2.2);
+warmKey.position.set(5, 8, 6);
+scene.add(warmKey);
+
+const coolFill = new THREE.DirectionalLight(0x2C5F7F, 1.5);
+coolFill.position.set(-6, 3, -4);
+scene.add(coolFill);
+
+const rimLight = new THREE.PointLight(0xFFD4A0, 2.0, 30);
+rimLight.position.set(3, 5, 3);
+scene.add(rimLight);
+
+const bottomLight = new THREE.PointLight(0xC85A3A, 1.2, 20);
+bottomLight.position.set(0, -4, 4);
+scene.add(bottomLight);
+
+// ── FALLBACK GEOMETRY ──
+function createFallback() {
+  const group = new THREE.Group();
+
+  const torusMat = new THREE.MeshStandardMaterial({
+    color: 0xC85A3A,
+    metalness: 0.75,
+    roughness: 0.2,
+  });
+
+  const torus = new THREE.Mesh(
+    new THREE.TorusGeometry(2.5, 0.55, 20, 60),
+    torusMat
+  );
+  torus.rotation.x = Math.PI * 0.3;
+  group.add(torus);
+
+  const cupBodyMat = new THREE.MeshStandardMaterial({
+    color: 0x8B4513,
+    metalness: 0.5,
+    roughness: 0.3,
+  });
+
+  const cylinder = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.8, 0.6, 1.5, 32),
+    cupBodyMat
+  );
+  cylinder.position.set(0, 0, 0);
+  group.add(cylinder);
+
+  const saucer = new THREE.Mesh(
+    new THREE.CylinderGeometry(1.4, 1.2, 0.15, 32),
+    new THREE.MeshStandardMaterial({ color: 0xD4A96A, metalness: 0.6, roughness: 0.25 })
+  );
+  saucer.position.set(0, -0.9, 0);
+  group.add(saucer);
+
+  const beanMat = new THREE.MeshStandardMaterial({ color: 0x5C3317, metalness: 0.3, roughness: 0.6 });
+  for (let i = 0; i < 8; i++) {
+    const angle = (i / 8) * Math.PI * 2;
+    const bean = new THREE.Mesh(new THREE.SphereGeometry(0.18, 8, 8), beanMat);
+    bean.position.set(Math.cos(angle) * 3.8, Math.sin(angle) * 0.5 - 0.5, Math.sin(angle) * 2.2);
+    bean.scale.set(1, 0.6, 1.4);
+    group.add(bean);
+  }
+
+  return group;
+}
+
+// ── PARTICLE FIELD (coffee steam/ambience) ──
+function createParticles() {
+  const count = 180;
+  const positions = new Float32Array(count * 3);
+  for (let i = 0; i < count; i++) {
+    positions[i * 3]     = (Math.random() - 0.5) * 28;
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 16;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 18 - 3;
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  const mat = new THREE.PointsMaterial({
+    color: 0xC85A3A,
+    size: 0.08,
+    transparent: true,
+    opacity: 0.5,
+    sizeAttenuation: true,
+  });
+  return new THREE.Points(geo, mat);
+}
+
+const particles = createParticles();
+scene.add(particles);
+
+let mainGroup = new THREE.Group();
+scene.add(mainGroup);
+
+// ── LOAD GLTF ──
+const loader = new GLTFLoader();
+let modelLoaded = false;
+
+loader.load(
+  'https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/CoffeeCart_01/CoffeeCart_01_1k.gltf',
+  (gltf) => {
+    modelLoaded = true;
+    const model = gltf.scene;
+
+    // Recolor materials to match palette
+    model.traverse((child) => {
+      if (child.isMesh) {
+        const origColor = child.material.color ? child.material.color.getHex() : 0xffffff;
+        if (origColor < 0x555555) {
+          child.material = new THREE.MeshStandardMaterial({
+            color: 0x3D2817,
+            metalness: 0.7,
+            roughness: 0.3,
+          });
+        } else {
+          child.material = new THREE.MeshStandardMaterial({
+            color: 0xC8976A,
+            metalness: 0.55,
+            roughness: 0.35,
+          });
+        }
+        child.castShadow = true;
+      }
+    });
+
+    // Scale & center
+    const box = new THREE.Box3().setFromObject(model);
+    const size = box.getSize(new THREE.Vector3());
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const scale = 4.5 / maxDim;
+    model.scale.setScalar(scale);
+
+    const center = box.getCenter(new THREE.Vector3());
+    model.position.sub(center.multiplyScalar(scale));
+    model.position.set(2.5, -1.5, 0);
+
+    mainGroup.add(model);
+  },
+  undefined,
+  () => {
+    // Fallback
+    const fallback = createFallback();
+    mainGroup.add(fallback);
+  }
+);
+
+// ── FLOATING ACCENT RINGS (Turkish tile inspired) ──
+const ringGroup = new THREE.Group();
+const ringMat = new THREE.MeshStandardMaterial({
+  color: 0x2C5F7F,
+  metalness: 0.8,
+  roughness: 0.2,
+  transparent: true,
+  opacity: 0.45,
+  wireframe: true,
+});
+const ring1 = new THREE.Mesh(new THREE.TorusGeometry(5, 0.04, 8, 80), ringMat);
+ring1.rotation.x = Math.PI * 0.5;
+ringGroup.add(ring1);
+
+const ring2Mat = ringMat.clone();
+ring2Mat.color.set(0xC85A3A);
+ring2Mat.opacity = 0.3;
+const ring2 = new THREE.Mesh(new THREE.TorusGeometry(6.5, 0.03, 8, 100), ring2Mat);
+ring2.rotation.x = Math.PI * 0.2;
+ring2.rotation.z = Math.PI * 0.3;
+ringGroup.add(ring2);
+
+ringGroup.position.set(-3, 0, -2);
+scene.add(ringGroup);
+
+// Small floating dodecahedra as tile ornaments
+const ornamentMat = new THREE.MeshStandardMaterial({
+  color: 0xD4A96A,
+  metalness: 0.85,
+  roughness: 0.15,
+});
+const ornaments = [];
+for (let i = 0; i < 6; i++) {
+  const mesh = new THREE.Mesh(new THREE.DodecahedronGeometry(0.22, 0), ornamentMat.clone());
+  mesh.position.set(
+    (Math.random() - 0.5) * 18,
+    (Math.random() - 0.5) * 10,
+    (Math.random() - 0.5) * 6 - 2
+  );
+  mesh.userData.speed = 0.4 + Math.random() * 0.6;
+  mesh.userData.offset = Math.random() * Math.PI * 2;
+  scene.add(mesh);
+  ornaments.push(mesh);
+}
+
+// ── ANIMATION ──
+let scrollY = 0;
+window.addEventListener('scroll', () => { scrollY = window.scrollY; });
+
+const clock = new THREE.Clock();
+
+(function animate() {
+  requestAnimationFrame(animate);
+  const t = clock.getElapsedTime();
+
+  // Main group rotation (gentle float)
+  mainGroup.rotation.y = Math.sin(t * 0.18) * 0.25;
+  mainGroup.position.y = Math.sin(t * 0.4) * 0.3;
+
+  // Rings rotation
+  ringGroup.rotation.y = t * 0.06;
+  ringGroup.rotation.z = t * 0.04;
+  ring1.rotation.z = t * 0.05;
+  ring2.rotation.y = t * 0.07;
+
+  // Camera parallax on scroll
+  camera.position.y = 2 - scrollY * 0.003;
+  camera.position.x = Math.sin(t * 0.1) * 0.5;
+
+  // Ornaments float
+  ornaments.forEach((o) => {
+    o.rotation.x += 0.008 * o.userData.speed;
+    o.rotation.y += 0.006 * o.userData.speed;
+    o.position.y += Math.sin(t * o.userData.speed + o.userData.offset) * 0.004;
+  });
+
+  // Particles drift
+  particles.rotation.y = t * 0.015;
+  particles.rotation.x = t * 0.008;
+
+  renderer.render(scene, camera);
+})();
+
+// ── RESIZE ──
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init({ duration: 800, once: true, offset: 80 });
+</script>
+</body>
+</html>

@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cafe Via He – San Jose, CA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #fafafa;
+      --text: #1a1a1a;
+      --accent: #2563eb;
+      --accent2: #6b7280;
+      --white: #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 5%;
+      background: rgba(250,250,250,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(26,26,26,0.07);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--accent2);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 9rem 5% 6rem;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 40%, rgba(37,99,235,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 10% 80%, rgba(37,99,235,0.05) 0%, transparent 60%),
+        var(--bg);
+    }
+
+    /* Dot pattern */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(37,99,235,0.12) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Decorative circle */
+    .hero-circle {
+      position: absolute;
+      right: -8rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: clamp(320px, 45vw, 640px);
+      height: clamp(320px, 45vw, 640px);
+      border-radius: 50%;
+      border: 1.5px solid rgba(37,99,235,0.15);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-circle::after {
+      content: '';
+      position: absolute;
+      inset: 2.5rem;
+      border-radius: 50%;
+      border: 1.5px solid rgba(37,99,235,0.1);
+    }
+
+    /* Diagonal accent bar */
+    .hero-bar {
+      position: absolute;
+      top: 0; right: 0;
+      width: 6px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      opacity: 0.4;
+      z-index: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 780px;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.6rem;
+    }
+
+    .hero-eyebrow span {
+      display: inline-block;
+      width: 32px;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.6rem, 9vw, 8.5rem);
+      font-weight: 900;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 1.8rem;
+    }
+
+    .hero-title .accent-word {
+      background: linear-gradient(135deg, var(--accent) 0%, #60a5fa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-tagline {
+      font-size: clamp(1.05rem, 2vw, 1.3rem);
+      color: var(--accent2);
+      font-weight: 400;
+      line-height: 1.6;
+      max-width: 460px;
+      margin-bottom: 2.8rem;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--accent);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.95rem 2.2rem;
+      border-radius: 4px;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+      box-shadow: 0 4px 20px rgba(37,99,235,0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(37,99,235,0.4);
+      background: #1d4ed8;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      padding: 0.95rem 2rem;
+      border-radius: 4px;
+      border: 1.5px solid rgba(26,26,26,0.18);
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s, transform 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .hero-bottom {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 80px;
+      background: linear-gradient(to bottom right, transparent 49.5%, var(--bg) 50%);
+      z-index: 2;
+    }
+
+    /* ─── SECTION BASE ─── */
+    section {
+      padding: 6rem 5%;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .section-label::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ─── ABOUT ─── */
+    .about {
+      background: var(--white);
+      position: relative;
+    }
+
+    .about-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      font-size: 1.08rem;
+      line-height: 1.85;
+      color: var(--accent2);
+      margin-bottom: 1.2rem;
+    }
+
+    .about-text p strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .about-card {
+      background: linear-gradient(135deg, rgba(37,99,235,0.06) 0%, rgba(37,99,235,0.02) 100%);
+      border: 1px solid rgba(37,99,235,0.12);
+      border-radius: 12px;
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .about-stat {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .about-stat .number {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .about-stat .label {
+      font-size: 0.85rem;
+      color: var(--accent2);
+      margin-top: 0.3rem;
+      font-weight: 500;
+    }
+
+    .about-divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(37,99,235,0.12);
+    }
+
+    /* ─── HOURS ─── */
+    .hours {
+      background: var(--bg);
+      position: relative;
+    }
+
+    .hours-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .hours-header {
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+
+    .hours-header .section-label {
+      justify-content: center;
+    }
+
+    .hours-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .hours-item {
+      background: var(--white);
+      border: 1px solid rgba(26,26,26,0.07);
+      border-radius: 8px;
+      padding: 1.4rem 1.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .hours-item:hover {
+      border-color: rgba(37,99,235,0.25);
+      box-shadow: 0 4px 16px rgba(37,99,235,0.07);
+    }
+
+    .hours-day {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .hours-time {
+      font-size: 0.88rem;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .hours-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(37,99,235,0.08);
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.35rem 0.9rem;
+      border-radius: 50px;
+      margin: 0 auto 2.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .hours-badge::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      background: #22c55e;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    /* ─── CONTACT ─── */
+    .contact {
+      background: var(--white);
+    }
+
+    .contact-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2.2rem;
+      margin-top: 2rem;
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 1.2rem;
+      align-items: flex-start;
+    }
+
+    .contact-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(37,99,235,0.08);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1.1rem;
+    }
+
+    .contact-detail .dlabel {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent2);
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+
+    .contact-detail a,
+    .contact-detail span {
+      font-size: 1.05rem;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .contact-detail a:hover { color: var(--accent); }
+
+    .contact-cta-box {
+      background: linear-gradient(135deg, var(--accent) 0%, #1d4ed8 100%);
+      border-radius: 16px;
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-cta-box::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .contact-cta-box::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; right: 20px;
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+
+    .contact-cta-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+      position: relative;
+      z-index: 1;
+    }
+
+    .contact-cta-box p {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-white {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #fff;
+      color: var(--accent);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 0.9rem 2rem;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-white:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+
+    /* ─── DIVIDER ─── */
+    .wave-divider {
+      width: 100%;
+      height: 60px;
+      background: var(--white);
+      clip-path: ellipse(55% 100% at 50% 0%);
+    }
+
+    .wave-divider.inv {
+      background: var(--bg);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--text);
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 2rem 5%;
+      font-size: 0.82rem;
+      letter-spacing: 0.03em;
+    }
+
+    footer a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    footer a:hover { color: #fff; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .about-inner,
+      .contact-inner {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+      .about-card {
+        padding: 2rem;
+      }
+      .contact-cta-box {
+        padding: 2rem;
+      }
+      .hero {
+        padding: 7rem 5% 5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">Cafe Via He</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#hours">Hours</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-circle"></div>
+    <div class="hero-bar"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span></span>
+        San Jose, CA · Est. in the Community
+      </div>
+      <h1 class="hero-title">
+        Cafe<br/><span class="accent-word">Via He</span>
+      </h1>
+      <p class="hero-tagline">
+        A warm corner of San Jose where every cup tells a story — proudly serving our community, one visit at a time.
+      </p>
+      <div class="hero-ctas">
+        <a href="tel:4089721322" class="btn-primary">
+          ☎ Call Now
+        </a>
+        <a href="https://www.google.com/maps/search/?api=1&query=2935+Senter+Rd,+San+Jose,+CA+95111" target="_blank" rel="noopener" class="btn-secondary">
+          ↗ Get Directions
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="about-inner">
+      <div class="about-text" data-aos="fade-up">
+        <p class="section-label">Our Story</p>
+        <h2 class="section-title">More Than a Café.<br/>A Community Hub.</h2>
+        <p>
+          <strong>Cafe Via He</strong> is a local gem nestled in the heart of San Jose, dedicated to bringing neighbors together over great food, drinks, and conversation.
+        </p>
+        <p>
+          We believe in the power of a shared meal and a familiar face. Whether you're stopping in for your morning ritual or a relaxed afternoon, we're here — every day of the week, from sunrise to evening.
+        </p>
+        <p>
+          Come as you are. Stay as long as you like.
+        </p>
+      </div>
+      <div class="about-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="about-stat">
+          <span class="number">7</span>
+          <span class="label">Days a Week, Open &amp; Ready</span>
+        </div>
+        <div class="about-divider"></div>
+        <div class="about-stat">
+          <span class="number">6AM</span>
+          <span class="label">Early Mornings, Every Morning</span>
+        </div>
+        <div class="about-divider"></div>
+        <div class="about-stat">
+          <span class="number">∞</span>
+          <span class="label">Good Moments Served Daily</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOURS -->
+  <section class="hours" id="hours">
+    <div class="hours-inner">
+      <div class="hours-header" data-aos="fade-up">
+        <p class="section-label">Visit Us</p>
+        <h2 class="section-title">Hours of Operation</h2>
+        <div class="hours-badge">Open Today</div>
+      </div>
+      <div class="hours-grid">
+        <div class="hours-item" data-aos="fade-up" data-aos-delay="0">
+          <span class="hours-day">Monday</span>
+          <span class="hours-time">6:00 AM – 8:00 PM</span>
+        </div>
+        <div class="hours-item" data-aos="fade-up" data-aos-delay="40">
+          <span class="hours-day">Tuesday</span>
+          <span class="hours-time">6:00 AM – 8:00 PM</span>
+        </div>
+        <div class="hours-item" data-aos="fade-up" data-aos-delay="80">
+          <span class="hours-day">Wednesday</span>
+          <span class="hours-time">6:00 AM – 8:00 PM</span>
+        </div>
+        <div class="hours-item" data-aos="fade-up" data-aos-delay="120">
+          <span class="hours-day">Thursday</span>
+          <span class="hours-time">6:00 AM – 8:00 PM</span>
+        </div>
+        <div class="hours-item" data-aos="fade-up" data-aos-delay="160">
+          <span class="hours-day">Friday</span>
+          <span class="hours-time">6:00 AM – 8:00 PM</span>
+        </div>
+        <div class="hours-item" data-aos="fade-up" data-aos-delay="200">
+          <span class="hours-day">Saturday</span>
+          <span class="hours-time">6:00 AM – 8:00 PM</span>
+        </div>
+        <div class="hours-item" data-aos="fade-up" data-aos-delay="240">
+          <span class="hours-day">Sunday</span>
+          <span class="hours-time">6:00 AM – 8:00 PM</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="contact-inner">
+      <div data-aos="fade-up">
+        <p class="section-label">Find Us</p>
+        <h2 class="section-title">Come Say Hello.</h2>
+        <div class="contact-info">
+          <div class="contact-item">
+            <div class="contact-icon">📞</div>
+            <div class="contact-detail">
+              <p class="dlabel">Phone</p>
+              <a href="tel:4089721322">(408) 972-1322</a>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">📍</div>
+            <div class="contact-detail">
+              <p class="dlabel">Address</p>
+              <a href="https://www.google.com/maps/search/?api=1&query=2935+Senter+Rd,+San+Jose,+CA+95111" target="_blank" rel="noopener">
+                2935 Senter Rd<br/>San Jose, CA 95111
+              </a>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">🕐</div>
+            <div class="contact-detail">
+              <p class="dlabel">Hours</p>
+              <span>Daily · 6:00 AM – 8:00 PM</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-cta-box" data-aos="fade-up" data-aos-delay="120">
+        <h3>Ready to Visit Us?</h3>
+        <p>We're open seven days a week and always happy to see a familiar face — or a new one. Stop by anytime.</p>
+        <a href="tel:4089721322" class="btn-white">☎ Call (408) 972-1322</a>
+        <a href="https://www.google.com/maps/search/?api=1&query=2935+Senter+Rd,+San+Jose,+CA+95111" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.8);font-size:0.88rem;text-decoration:none;position:relative;z-index:1;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.8)'">↗ Open in Google Maps</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2024 Cafe Via He · 2935 Senter Rd, San Jose, CA 95111 · <a href="tel:4089721322">(408) 972-1322</a></p>
+    <p style="margin-top:0.5rem;">Website built by <a href="https://platter.site" target="_blank" rel="noopener">Platter</a></p>
+  </footer>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, once: true });
+  </script>
+</body>
+</html>

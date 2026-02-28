@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Café LaTTea – Coffee, Tea & Asian Sweets in Cupertino</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #fafafa;
+      --text: #1a1a1a;
+      --accent: #2563eb;
+      --accent2: #6b7280;
+      --glass-bg: rgba(255,255,255,0.75);
+      --glass-border: rgba(255,255,255,0.9);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* Three.js Canvas */
+    #bg-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* All sections above canvas */
+    main, header, footer { position: relative; z-index: 1; }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.2rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(250,250,250,0.8);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.6);
+    }
+
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--accent2);
+      text-decoration: none;
+      transition: color 0.25s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: clamp(6rem, 12vw, 10rem) 2rem 4rem;
+    }
+
+    .hero-pill {
+      display: inline-block;
+      background: rgba(37,99,235,0.1);
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--accent2);
+      font-weight: 400;
+      max-width: 480px;
+      line-height: 1.65;
+      margin-bottom: 2.5rem;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.9rem 2.4rem;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+      box-shadow: 0 4px 24px rgba(37,99,235,0.3);
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(37,99,235,0.4);
+    }
+
+    .btn-secondary {
+      display: inline-block;
+      background: var(--text);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.9rem 2.4rem;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    .btn-secondary:hover {
+      background: #333;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.25);
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* SCROLL INDICATOR */
+    .scroll-indicator {
+      margin-top: 4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--accent2);
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--accent2), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.2); }
+    }
+
+    /* SECTIONS */
+    section {
+      padding: clamp(4rem, 8vw, 7rem) 2rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+    }
+
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ABOUT */
+    #about {
+      background: transparent;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+
+    .about-text p {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--accent2);
+      margin-bottom: 1rem;
+    }
+
+    .about-text p:last-child { margin-bottom: 0; }
+
+    .about-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .about-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 1.4rem 1.6rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+
+    .about-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    }
+
+    .card-icon {
+      font-size: 1.6rem;
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      background: rgba(37,99,235,0.1);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-label {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.25rem;
+      color: var(--text);
+    }
+
+    .card-desc {
+      font-size: 0.85rem;
+      color: var(--accent2);
+      line-height: 1.5;
+    }
+
+    /* MENU HIGHLIGHTS */
+    #menu {
+      background: rgba(255,255,255,0.4);
+      backdrop-filter: blur(4px);
+    }
+
+    .menu-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .menu-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.12);
+    }
+
+    .menu-emoji {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .menu-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .menu-desc {
+      font-size: 0.85rem;
+      color: var(--accent2);
+      line-height: 1.55;
+    }
+
+    /* HOURS */
+    #hours .hours-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 700px) {
+      #hours .hours-grid { grid-template-columns: 1fr; }
+    }
+
+    .hours-table {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    }
+
+    .hours-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.7rem 0;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      font-size: 0.9rem;
+    }
+
+    .hours-row:last-child { border-bottom: none; }
+
+    .hours-day { color: var(--text); font-weight: 500; }
+    .hours-time { color: var(--accent2); }
+
+    .hours-open {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(37,99,235,0.1);
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.3rem 0.8rem;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hours-open::before {
+      content: '';
+      width: 7px; height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: blink 1.8s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* CONTACT */
+    #contact {
+      background: rgba(255,255,255,0.4);
+    }
+
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .contact-inner { grid-template-columns: 1fr; }
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      padding: 1.2rem 1.4rem;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    a.contact-item:hover {
+      transform: translateX(4px);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+    }
+
+    .contact-icon {
+      font-size: 1.2rem;
+      width: 38px;
+      height: 38px;
+      background: rgba(37,99,235,0.1);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-label {
+      font-size: 0.75rem;
+      color: var(--accent2);
+      margin-bottom: 0.2rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .contact-value {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .contact-cta {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .contact-cta .section-title { margin-bottom: 0.5rem; }
+
+    .contact-cta p {
+      color: var(--accent2);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid rgba(0,0,0,0.08);
+      padding: 2rem;
+      text-align: center;
+      background: rgba(255,255,255,0.5);
+      backdrop-filter: blur(10px);
+    }
+
+    footer p {
+      font-size: 0.85rem;
+      color: var(--accent2);
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    footer a:hover { text-decoration: underline; }
+
+    /* Responsive nav */
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#hero">Café <span>LaTTea</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#hours">Hours</a></li>
+    <li><a href="#contact">Visit Us</a></li>
+  </ul>
+</nav>
+
+<main>
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-pill">☕ Now Open in Cupertino</div>
+    <h1 class="hero-title">Coffee, Tea &<br /><em>Asian Sweets</em></h1>
+    <p class="hero-sub">Your laid-back corner for craft drinks, creamy gelato, and unique Asian-inspired treats — every day of the week.</p>
+    <div class="hero-actions">
+      <a href="tel:+14082552393" class="btn-primary">Call to Order</a>
+      <a href="https://maps.google.com/?q=19501+Stevens+Creek+Blvd+STE+101+Cupertino+CA+95014" target="_blank" rel="noopener" class="btn-secondary">Get Directions</a>
+    </div>
+    <div class="scroll-indicator">
+      <span>Explore</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text" data-aos="fade-right">
+          <div class="section-label">Who We Are</div>
+          <h2 class="section-title">A Little place with a lot of heart</h2>
+          <p>Café LaTTea is your neighborhood counter-serve hideaway for specialty coffee drinks, carefully brewed teas, and a curated selection of Asian-inspired sweets you won't find anywhere else.</p>
+          <p>We bring together the comfort of a great latte and the joy of discovering something new — from mochi desserts to silky gelato — all in a welcoming, relaxed setting.</p>
+        </div>
+        <div class="about-cards" data-aos="fade-left" data-aos-delay="100">
+          <div class="about-card">
+            <div class="card-icon">☕</div>
+            <div>
+              <div class="card-label">Craft Coffee & Tea</div>
+              <div class="card-desc">Espresso drinks, artisan teas, and seasonal specialties made with care.</div>
+            </div>
+          </div>
+          <div class="about-card">
+            <div class="card-icon">🍡</div>
+            <div>
+              <div class="card-label">Asian Sweets</div>
+              <div class="card-desc">Unique desserts inspired by Asian flavors — surprising, delightful, and memorable.</div>
+            </div>
+          </div>
+          <div class="about-card">
+            <div class="card-icon">🍦</div>
+            <div>
+              <div class="card-label">Creamy Gelato</div>
+              <div class="card-desc">Rich, smooth gelato in classic and creative flavors to finish your visit perfectly.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU HIGHLIGHTS -->
+  <section id="menu">
+    <div class="container">
+      <div class="menu-header" data-aos="fade-up">
+        <div class="section-label">Our Menu</div>
+        <h2 class="section-title">Something for every craving</h2>
+      </div>
+      <div class="menu-grid">
+        <div class="menu-card" data-aos="fade-up" data-aos-delay="0">
+          <span class="menu-emoji">🧋</span>
+          <div class="menu-name">Milk Teas</div>
+          <div class="menu-desc">Classic and signature milk teas brewed fresh with premium loose-leaf varieties.</div>
+        </div>
+        <div class="menu-card" data-aos="fade-up" data-aos-delay="80">
+          <span class="menu-emoji">☕</span>
+          <div class="menu-name">Coffee Drinks</div>
+          <div class="menu-desc">Lattes, americanos, and specialty espresso creations with a creative twist.</div>
+        </div>
+        <div class="menu-card" data-aos="fade-up" data-aos-delay="160">
+          <span class="menu-emoji">🍡</span>
+          <div class="menu-name">Asian Sweets</div>
+          <div class="menu-desc">Mochi, matcha treats, and other beloved Asian confections made to delight.</div>
+        </div>
+        <div class="menu-card" data-aos="fade-up" data-aos-delay="240">
+          <span class="menu-emoji">🍦</span>
+          <div class="menu-name">Gelato</div>
+          <div class="menu-desc">Luscious Italian-style gelato in rotating seasonal and classic flavors.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOURS -->
+  <section id="hours">
+    <div class="container">
+      <div class="hours-grid">
+        <div data-aos="fade-right">
+          <div class="section-label">Opening Hours</div>
+          <h2 class="section-title">We're open all week long</h2>
+          <p style="color:var(--accent2); font-size:1rem; line-height:1.7; margin-bottom:1.5rem;">Whether it's a mid-week pick-me-up or a weekend treat, we're here for you — every single day.</p>
+          <a href="tel:+14082552393" class="btn-primary">Call Us Now</a>
+        </div>
+        <div class="hours-table" data-aos="fade-left" data-aos-delay="100">
+          <div class="hours-open">Open Today</div>
+          <div class="hours-row"><span class="hours-day">Monday</span><span class="hours-time">11:00 AM – 10:00 PM</span></div>
+          <div class="hours-row"><span class="hours-day">Tuesday</span><span class="hours-time">11:00 AM – 10:00 PM</span></div>
+          <div class="hours-row"><span class="hours-day">Wednesday</span><span class="hours-time">11:00 AM – 10:00 PM</span></div>
+          <div class="hours-row"><span class="hours-day">Thursday</span><span class="hours-time">11:00 AM – 10:00 PM</span></div>
+          <div class="hours-row"><span class="hours-day">Friday</span><span class="hours-time">11:00 AM – 10:00 PM</span></div>
+          <div class="hours-row"><span class="hours-day">Saturday</span><span class="hours-time">11:00 AM – 10:00 PM</span></div>
+          <div class="hours-row"><span class="hours-day">Sunday</span><span class="hours-time">11:00 AM – 10:00 PM</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-inner">
+        <div class="contact-cta" data-aos="fade-right">
+          <div class="section-label">Visit Us</div>
+          <h2 class="section-title">Come say hello in Cupertino</h2>
+          <p>We'd love to welcome you in. Stop by for your daily brew, an afternoon treat, or just to explore our menu. We're easy to find on Stevens Creek Blvd.</p>
+          <a href="https://maps.google.com/?q=19501+Stevens+Creek+Blvd+STE+101+Cupertino+CA+95014" target="_blank" rel="noopener" class="btn-primary">Open in Google Maps</a>
+        </div>
+        <div class="contact-info" data-aos="fade-left" data-aos-delay="100">
+          <a class="contact-item" href="tel:+14082552393">
+            <div class="contact-icon">📞</div>
+            <div>
+              <div class="contact-label">Phone</div>
+              <div class="contact-value">(408) 255-2393</div>
+            </div>
+          </a>
+          <a class="contact-item" href="https://maps.google.com/?q=19501+Stevens+Creek+Blvd+STE+101+Cupertino+CA+95014" target="_blank" rel="noopener">
+            <div class="contact-icon">📍</div>
+            <div>
+              <div class="contact-label">Address</div>
+              <div class="contact-value">19501 Stevens Creek Blvd STE 101<br />Cupertino, CA 95014</div>
+            </div>
+          </a>
+          <div class="contact-item">
+            <div class="contact-icon">🕐</div>
+            <div>
+              <div class="contact-label">Hours</div>
+              <div class="contact-value">Daily · 11:00 AM – 10:00 PM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>© 2024 Café LaTTea · Cupertino, CA · <a href="https://platter.site" target="_blank" rel="noopener">Website built by Platter</a></p>
+</footer>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.158.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.158.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+  import * as THREE from 'three';
+
+  const canvas = document.getElementById('bg-canvas');
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x000000, 0);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 200);
+  camera.position.set(0, 0, 14);
+
+  // LIGHTING — warm cafe vibe
+  const ambientLight = new THREE.AmbientLight(0xfff8f0, 1.2);
+  scene.add(ambientLight);
+
+  const dirLight1 = new THREE.DirectionalLight(0x2563eb, 2.0);
+  dirLight1.position.set(5, 8, 6);
+  scene.add(dirLight1);
+
+  const dirLight2 = new THREE.DirectionalLight(0xfbbf24, 1.5);
+  dirLight2.position.set(-6, -3, 4);
+  scene.add(dirLight2);
+
+  const pointLight = new THREE.PointLight(0xe0f2fe, 1.8, 40);
+  pointLight.position.set(0, 5, 8);
+  scene.add(pointLight);
+
+  // Soft warm fill
+  const fillLight = new THREE.PointLight(0xfde68a, 1.2, 50);
+  fillLight.position.set(-8, -4, 2);
+  scene.add(fillLight);
+
+  // Materials — soft, warm, cafe-inspired
+  const matA = new THREE.MeshStandardMaterial({
+    color: 0x93c5fd,        // soft blue
+    metalness: 0.3,
+    roughness: 0.35,
+    transparent: true,
+    opacity: 0.72,
+  });
+
+  const matB = new THREE.MeshStandardMaterial({
+    color: 0xfde68a,        // warm cream/gold
+    metalness: 0.2,
+    roughness: 0.5,
+    transparent: true,
+    opacity: 0.65,
+  });
+
+  const matC = new THREE.MeshStandardMaterial({
+    color: 0xbfdbfe,        // pale blue
+    metalness: 0.15,
+    roughness: 0.6,
+    transparent: true,
+    opacity: 0.55,
+  });
+
+  const matD = new THREE.MeshStandardMaterial({
+    color: 0xfcd34d,        // golden
+    metalness: 0.4,
+    roughness: 0.25,
+    transparent: true,
+    opacity: 0.6,
+  });
+
+  const matWire = new THREE.MeshStandardMaterial({
+    color: 0x2563eb,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.18,
+  });
+
+  // Shapes — rounded/soft for cafe vibe
+  const shapes = [];
+
+  // Large torus (coffee ring)
+  const torusGeo = new THREE.TorusGeometry(3.5, 0.9, 32, 80);
+  const torus = new THREE.Mesh(torusGeo, matA);
+  torus.position.set(7, 2, -4);
+  torus.rotation.set(0.5, 0.3, 0);
+  scene.add(torus);
+  shapes.push({ mesh: torus, rx: 0.003, ry: 0.005, rz: 0.002, floatAmp: 0.3, floatSpeed: 0.8, baseY: 2 });
+
+  // Medium sphere (tea bubble)
+  const sphereGeo = new THREE.SphereGeometry(2.2, 48, 48);
+  const sphere = new THREE.Mesh(sphereGeo, matB);
+  sphere.position.set(-7.5, -1.5, -3);
+  scene.add(sphere);
+  shapes.push({ mesh: sphere, rx: 0.002, ry: 0.004, rz: 0.001, floatAmp: 0.5, floatSpeed: 0.6, baseY: -1.5 });
+
+  // Small icosahedron
+  const icoGeo = new THREE.IcosahedronGeometry(1.4, 1);
+  const ico = new THREE.Mesh(icoGeo, matD);
+  ico.position.set(-3, 4.5, -5);
+  scene.add(ico);
+  shapes.push({ mesh: ico, rx: 0.006, ry: 0.008, rz: 0.003, floatAmp: 0.6, floatSpeed: 1.1, baseY: 4.5 });
+
+  // Torus knot (decorative swirl)
+  const knotGeo = new THREE.TorusKnotGeometry(1.3, 0.38, 100, 18);
+  const knot = new THREE.Mesh(knotGeo, matC);
+  knot.position.set(3.5, -4.5, -6);
+  scene.add(knot);
+  shapes.push({ mesh: knot, rx: 0.004, ry: 0.006, rz: 0.003, floatAmp: 0.4, floatSpeed: 0.9, baseY: -4.5 });
+
+  // Large wireframe octahedron (subtle)
+  const octGeo = new THREE.OctahedronGeometry(4.5, 2);
+  const oct = new THREE.Mesh(octGeo, matWire);
+  oct.position.set(1, 0, -8);
+  scene.add(oct);
+  shapes.push({ mesh: oct, rx: 0.001, ry: 0.003, rz: 0.001, floatAmp: 0.2, floatSpeed: 0.4, baseY: 0 });
+
+  // Tiny accent spheres (floating bubbles)
+  const bubblePositions = [
+    [-5, 3, -2], [4, -3, -3], [6, 5, -5], [-2, -5, -4], [0, 6, -6]
+  ];
+  bubblePositions.forEach((pos, i) => {
+    const r = 0.25 + Math.random() * 0.35;
+    const bGeo = new THREE.SphereGeometry(r, 16, 16);
+    const bMat = new THREE.MeshStandardMaterial({
+      color: i % 2 === 0 ? 0x2563eb : 0xfbbf24,
+      metalness: 0.5,
+      roughness: 0.2,
+      transparent: true,
+      opacity: 0.5 + Math.random() * 0.3,
+    });
+    const bubble = new THREE.Mesh(bGeo, bMat);
+    bubble.position.set(...pos);
+    scene.add(bubble);
+    shapes.push({
+      mesh: bubble,
+      rx: 0,
+      ry: 0.01,
+      rz: 0,
+      floatAmp: 0.3 + Math.random() * 0.4,
+      floatSpeed: 0.7 + Math.random() * 0.8,
+      baseY: pos[1],
+    });
+  });
+
+  // Particle field
+  const particleCount = 280;
+  const positions = new Float32Array(particleCount * 3);
+  for (let i = 0; i < particleCount; i++) {
+    positions[i * 3]     = (Math.random() - 0.5) * 40;
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 30;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 20 - 5;
+  }
+  const particleGeo = new THREE.BufferGeometry();
+  particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  const particleMat = new THREE.PointsMaterial({
+    color: 0x2563eb,
+    size: 0.08,
+    transparent: true,
+    opacity: 0.35,
+    sizeAttenuation: true,
+  });
+  const particles = new THREE.Points(particleGeo, particleMat);
+  scene.add(particles);
+
+  // Mouse parallax
+  let mouseX = 0, mouseY = 0;
+  window.addEventListener('mousemove', (e) => {
+    mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+  });
+
+  // Resize
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  // Animation
+  const clock = new THREE.Clock();
+
+  function animate() {
+    requestAnimationFrame(animate);
+    const t = clock.getElapsedTime();
+
+    shapes.forEach((s) => {
+      s.mesh.rotation.x += s.rx;
+      s.mesh.rotation.y += s.ry;
+      s.mesh.rotation.z += s.rz;
+      s.mesh.position.y = s.baseY + Math.sin(t * s.floatSpeed) * s.floatAmp;
+    });
+
+    particles.rotation.y = t * 0.02;
+    particles.rotation.x = t * 0.01;
+
+    // Subtle camera drift based on mouse
+    camera.position.x += (mouseX * 1.2 - camera.position.x) * 0.04;
+    camera.position.y += (-mouseY * 0.8 - camera.position.y) * 0.04;
+    camera.lookAt(0, 0, 0);
+
+    renderer.render(scene, camera);
+  }
+
+  animate();
+</script>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init({ duration: 800, once: true });
+</script>
+</body>
+</html>

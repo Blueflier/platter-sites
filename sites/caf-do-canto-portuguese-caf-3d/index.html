@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Café do Canto – Portuguese Café</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #fafafa;
+      --text: #1a1a1a;
+      --accent: #2563eb;
+      --accent2: #6b7280;
+      --glass: rgba(255,255,255,0.75);
+      --glass-border: rgba(255,255,255,0.9);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ─── Three.js Canvas ─── */
+    #bg-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem clamp(1.5rem, 5vw, 4rem);
+      background: rgba(250,250,250,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,0.07);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--accent2);
+      text-decoration: none;
+      transition: color 0.2s;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ─── HERO ─── */
+    #hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: clamp(6rem, 12vw, 10rem) clamp(1.5rem, 5vw, 4rem) 4rem;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(37,99,235,0.1);
+      border: 1px solid rgba(37,99,235,0.25);
+      border-radius: 100px;
+      padding: 0.4rem 1rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.8rem;
+    }
+
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 1.4rem;
+      max-width: 14ch;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: var(--accent2);
+      font-weight: 400;
+      max-width: 48ch;
+      line-height: 1.6;
+      margin-bottom: 2.8rem;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--accent);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.9rem 2.2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+      box-shadow: 0 4px 24px rgba(37,99,235,0.35);
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(37,99,235,0.45);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255,255,255,0.8);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.9rem 2.2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      border: 1px solid rgba(0,0,0,0.12);
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      backdrop-filter: blur(8px);
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+
+    /* ─── HOURS STRIP ─── */
+    .hours-strip {
+      position: relative;
+      z-index: 1;
+      background: var(--accent);
+      color: #fff;
+      padding: 1rem clamp(1.5rem, 5vw, 4rem);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+    }
+
+    .hours-item { display: flex; align-items: center; gap: 0.5rem; }
+    .hours-dot { width: 5px; height: 5px; background: rgba(255,255,255,0.5); border-radius: 50%; }
+
+    /* ─── SECTIONS ─── */
+    section {
+      position: relative;
+      z-index: 1;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 clamp(1.5rem, 5vw, 4rem);
+    }
+
+    /* ─── ABOUT ─── */
+    #about {
+      padding: clamp(5rem, 10vw, 9rem) 0;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .nav-links { display: none; }
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4.5vw, 3rem);
+      font-weight: 700;
+      line-height: 1.18;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.2rem;
+      color: var(--text);
+    }
+
+    .about-text p {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--accent2);
+      margin-bottom: 1rem;
+    }
+
+    .about-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .about-card {
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px;
+      padding: 1.6rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    }
+
+    .about-card-icon {
+      font-size: 1.8rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .about-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      color: var(--text);
+    }
+
+    .about-card p {
+      font-size: 0.83rem;
+      color: var(--accent2);
+      line-height: 1.5;
+    }
+
+    /* ─── HOURS SECTION ─── */
+    #hours {
+      padding: clamp(5rem, 10vw, 9rem) 0;
+      background: rgba(255,255,255,0.55);
+    }
+
+    .hours-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+
+    .hours-card {
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 1.4rem 1.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .hours-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.09);
+    }
+
+    .hours-card.today {
+      border-color: rgba(37,99,235,0.4);
+      background: rgba(37,99,235,0.06);
+    }
+
+    .hours-day {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .hours-time {
+      font-size: 0.88rem;
+      color: var(--accent2);
+      font-weight: 400;
+    }
+
+    .today-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      background: var(--accent);
+      color: #fff;
+      padding: 0.2rem 0.6rem;
+      border-radius: 100px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* ─── CONTACT ─── */
+    #contact {
+      padding: clamp(5rem, 10vw, 9rem) 0;
+    }
+
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .contact-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+
+    .contact-card {
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 2.4rem;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.07);
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      margin-bottom: 1.8rem;
+    }
+
+    .contact-item:last-child { margin-bottom: 0; }
+
+    .contact-icon {
+      width: 44px; height: 44px;
+      background: rgba(37,99,235,0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .contact-item-text .label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 0.25rem;
+    }
+
+    .contact-item-text a,
+    .contact-item-text p {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text);
+      text-decoration: none;
+      line-height: 1.5;
+    }
+
+    .contact-item-text a:hover { color: var(--accent); }
+
+    .cta-box {
+      background: var(--accent);
+      border-radius: 24px;
+      padding: 2.8rem 2.4rem;
+      color: #fff;
+      text-align: center;
+      box-shadow: 0 8px 40px rgba(37,99,235,0.3);
+    }
+
+    .cta-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+      line-height: 1.2;
+    }
+
+    .cta-box p {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .btn-white {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #fff;
+      color: var(--accent);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 0.9rem 2.2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      margin-bottom: 1rem;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .btn-white:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+
+    .btn-white-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.9rem 2.2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      border: 2px solid rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .btn-white-outline:hover {
+      border-color: #fff;
+      transform: translateY(-2px);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem clamp(1.5rem, 5vw, 4rem);
+      font-size: 0.82rem;
+      color: var(--accent2);
+      border-top: 1px solid rgba(0,0,0,0.07);
+      background: rgba(250,250,250,0.9);
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    footer a:hover { text-decoration: underline; }
+
+    /* ─── Divider ─── */
+    .section-divider {
+      width: 48px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+      margin-bottom: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">Café <span>do Canto</span></div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#hours">Hours</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="tel:4082722929" class="btn-primary" style="padding:0.6rem 1.5rem; font-size:0.85rem;">📞 Call Us</a>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-badge">Portuguese Café · San Jose, CA</div>
+    <h1>A Corner of <em>Portugal</em> in San Jose</h1>
+    <p class="hero-tagline">Warm coffee, fresh pastries, and a welcoming atmosphere — proudly serving our community every morning.</p>
+    <div class="hero-cta-group">
+      <a href="tel:4082722929" class="btn-primary">☎ Call Now · (408) 272-2929</a>
+      <a href="https://maps.google.com/?q=7+N+33rd+St,+San+Jose,+CA+95116" target="_blank" rel="noopener" class="btn-secondary">📍 Get Directions</a>
+    </div>
+  </section>
+
+  <!-- HOURS STRIP -->
+  <div class="hours-strip">
+    <div class="hours-item">🕕 Mon–Sat: 6:00 AM – 1:00 PM</div>
+    <div class="hours-dot"></div>
+    <div class="hours-item">🕖 Sunday: 7:00 AM – 12:00 PM</div>
+    <div class="hours-dot"></div>
+    <div class="hours-item">📍 7 N 33rd St, San Jose</div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text" data-aos="fade-up">
+          <span class="section-label">Our Story</span>
+          <div class="section-divider"></div>
+          <h2>Where Every Cup Feels Like Home</h2>
+          <p>Café do Canto is a beloved local café rooted in Portuguese tradition. We wake up early every morning to bring you the freshest coffee and pastries, crafted with love.</p>
+          <p>Serving our community from the heart of San Jose, we believe a great cup of coffee is the best way to start any day — surrounded by familiar faces and warm smiles.</p>
+        </div>
+        <div class="about-cards" data-aos="fade-up" data-aos-delay="150">
+          <div class="about-card">
+            <div class="about-card-icon">☕</div>
+            <h3>Authentic Coffee</h3>
+            <p>Traditional Portuguese espresso and specialty brews.</p>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon">🥐</div>
+            <h3>Fresh Pastries</h3>
+            <p>Baked daily with classic recipes and local ingredients.</p>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon">🏡</div>
+            <h3>Community Heart</h3>
+            <p>A gathering place for neighbors and friends since day one.</p>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon">🌅</div>
+            <h3>Early Mornings</h3>
+            <p>Open at 6 AM so you never miss a perfect start to your day.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOURS -->
+  <section id="hours">
+    <div class="container">
+      <div data-aos="fade-up" style="text-align:center;">
+        <span class="section-label">Visit Us</span>
+        <div class="section-divider" style="margin:0 auto 1.2rem;"></div>
+        <h2>Business Hours</h2>
+        <p style="color:var(--accent2); font-size:1rem; margin-top:0.5rem;">We're here early — so your morning is off to a great start.</p>
+      </div>
+      <div class="hours-grid" data-aos="fade-up" data-aos-delay="100">
+        <div class="hours-card today" id="card-mon">
+          <div>
+            <div class="hours-day">Monday</div>
+            <div class="hours-time">6:00 AM – 1:00 PM</div>
+          </div>
+          <span class="today-badge" id="badge-mon" style="display:none">Today</span>
+        </div>
+        <div class="hours-card" id="card-tue">
+          <div>
+            <div class="hours-day">Tuesday</div>
+            <div class="hours-time">6:00 AM – 1:00 PM</div>
+          </div>
+          <span class="today-badge" id="badge-tue" style="display:none">Today</span>
+        </div>
+        <div class="hours-card" id="card-wed">
+          <div>
+            <div class="hours-day">Wednesday</div>
+            <div class="hours-time">6:00 AM – 1:00 PM</div>
+          </div>
+          <span class="today-badge" id="badge-wed" style="display:none">Today</span>
+        </div>
+        <div class="hours-card" id="card-thu">
+          <div>
+            <div class="hours-day">Thursday</div>
+            <div class="hours-time">6:00 AM – 1:00 PM</div>
+          </div>
+          <span class="today-badge" id="badge-thu" style="display:none">Today</span>
+        </div>
+        <div class="hours-card" id="card-fri">
+          <div>
+            <div class="hours-day">Friday</div>
+            <div class="hours-time">6:00 AM – 1:00 PM</div>
+          </div>
+          <span class="today-badge" id="badge-fri" style="display:none">Today</span>
+        </div>
+        <div class="hours-card" id="card-sat">
+          <div>
+            <div class="hours-day">Saturday</div>
+            <div class="hours-time">6:00 AM – 1:00 PM</div>
+          </div>
+          <span class="today-badge" id="badge-sat" style="display:none">Today</span>
+        </div>
+        <div class="hours-card" id="card-sun">
+          <div>
+            <div class="hours-day">Sunday</div>
+            <div class="hours-time">7:00 AM – 12:00 PM</div>
+          </div>
+          <span class="today-badge" id="badge-sun" style="display:none">Today</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div data-aos="fade-up" style="text-align:center; margin-bottom:3rem;">
+        <span class="section-label">Find Us</span>
+        <div class="section-divider" style="margin:0 auto 1.2rem;"></div>
+        <h2>Come Say Hello</h2>
+      </div>
+      <div class="contact-inner">
+        <div class="contact-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="contact-item">
+            <div class="contact-icon">📞</div>
+            <div class="contact-item-text">
+              <div class="label">Phone</div>
+              <a href="tel:4082722929">(408) 272-2929</a>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">📍</div>
+            <div class="contact-item-text">
+              <div class="label">Address</div>
+              <a href="https://maps.google.com/?q=7+N+33rd+St,+San+Jose,+CA+95116" target="_blank" rel="noopener">7 N 33rd St<br>San Jose, CA 95116</a>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">🕕</div>
+            <div class="contact-item-text">
+              <div class="label">Hours</div>
+              <p>Mon–Sat: 6:00 AM – 1:00 PM<br>Sunday: 7:00 AM – 12:00 PM</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cta-box" data-aos="fade-up" data-aos-delay="200">
+          <h3>Ready for Your Morning Coffee?</h3>
+          <p>Stop by and experience Portuguese café culture right here in San Jose. We can't wait to welcome you.</p>
+          <a href="tel:4082722929" class="btn-white">☎ Call (408) 272-2929</a>
+          <a href="https://maps.google.com/?q=7+N+33rd+St,+San+Jose,+CA+95116" target="_blank" rel="noopener" class="btn-white-outline">📍 Get Directions</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2024 Café do Canto · 7 N 33rd St, San Jose, CA 95116 · <a href="tel:4082722929">(408) 272-2929</a></p>
+    <p style="margin-top:0.4rem;">Website built by <a href="https://platter.site" target="_blank" rel="noopener">Platter</a></p>
+  </footer>
+
+  <!-- TODAY HIGHLIGHT SCRIPT -->
+  <script>
+    const dayMap = ['sun','mon','tue','wed','thu','fri','sat'];
+    const today = dayMap[new Date().getDay()];
+    const badgeEl = document.getElementById('badge-' + today);
+    const cardEl = document.getElementById('card-' + today);
+    if (badgeEl) badgeEl.style.display = 'inline-block';
+    if (cardEl) {
+      cardEl.classList.add('today');
+      cardEl.style.borderColor = 'rgba(37,99,235,0.4)';
+      cardEl.style.background = 'rgba(37,99,235,0.06)';
+    }
+  </script>
+
+  <!-- THREE.JS -->
+  <script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.158.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.158.0/examples/jsm/"}}</script>
+  <script type="module">
+    import * as THREE from 'three';
+
+    const canvas = document.getElementById('bg-canvas');
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x000000, 0);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.z = 12;
+
+    // ─── Lighting ───
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+    scene.add(ambientLight);
+
+    const dirLight1 = new THREE.DirectionalLight(0x2563eb, 2.0);
+    dirLight1.position.set(5, 8, 5);
+    scene.add(dirLight1);
+
+    const dirLight2 = new THREE.DirectionalLight(0xf59e42, 1.5);
+    dirLight2.position.set(-6, -3, 4);
+    scene.add(dirLight2);
+
+    const pointLight = new THREE.PointLight(0x6b7280, 1.2, 30);
+    pointLight.position.set(0, 0, 6);
+    scene.add(pointLight);
+
+    // ─── Helper: create a floating shape ───
+    function makeShape(geometry, color, metalness, roughness, x, y, z, scale) {
+      const mat = new THREE.MeshStandardMaterial({
+        color,
+        metalness,
+        roughness,
+        transparent: true,
+        opacity: 0.75,
+      });
+      const mesh = new THREE.Mesh(geometry, mat);
+      mesh.position.set(x, y, z);
+      mesh.scale.setScalar(scale);
+      scene.add(mesh);
+      return mesh;
+    }
+
+    // ─── Torus (coffee cup ring feel) — main focal shape ───
+    const torusGeo = new THREE.TorusGeometry(2.8, 0.55, 24, 80);
+    const torus = makeShape(torusGeo, 0x2563eb, 0.25, 0.55, -4, 1.5, -2, 1);
+
+    // ─── Sphere (soft, warm) ───
+    const sphereGeo = new THREE.SphereGeometry(1.6, 48, 48);
+    const sphere = makeShape(sphereGeo, 0xf5a623, 0.3, 0.5, 4.5, -1.5, -3, 1);
+
+    // ─── Small torus ───
+    const torus2Geo = new THREE.TorusGeometry(1.1, 0.28, 16, 60);
+    const torus2 = makeShape(torus2Geo, 0x6b7280, 0.2, 0.7, 3, 3.5, -4, 1);
+
+    // ─── Icosahedron (subtle, modern) ───
+    const icoGeo = new THREE.IcosahedronGeometry(1.3, 0);
+    const ico = makeShape(icoGeo, 0x2563eb, 0.15, 0.65, -5.5, -2.5, -3, 1);
+
+    // ─── Small spheres scattered ───
+    const smallSphereGeo = new THREE.SphereGeometry(0.35, 20, 20);
+    const smallSpheres = [];
+    const smallData = [
+      [1.5, 4, -5, 0xf5a623],
+      [-2.5, -4, -4, 0x2563eb],
+      [6, 1, -5, 0xd4b08c],
+      [-6, 3, -5, 0xd4b08c],
+      [0, -3.5, -4, 0xf5a623],
+    ];
+    smallData.forEach(([x, y, z, col]) => {
+      const mat = new THREE.MeshStandardMaterial({ color: col, metalness: 0.2, roughness: 0.6, transparent: true, opacity: 0.55 });
+      const m = new THREE.Mesh(smallSphereGeo, mat);
+      m.position.set(x, y, z);
+      scene.add(m);
+      smallSpheres.push(m);
+    });
+
+    // ─── Particle field ───
+    const particleCount = 180;
+    const positions = new Float32Array(particleCount * 3);
+    for (let i = 0; i < particleCount; i++) {
+      positions[i * 3]     = (Math.random() - 0.5) * 28;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 20;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 14 - 4;
+    }
+    const particleGeo = new THREE.BufferGeometry();
+    particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const particleMat = new THREE.PointsMaterial({
+      color: 0x2563eb,
+      size: 0.08,
+      transparent: true,
+      opacity: 0.35,
+      sizeAttenuation: true,
+    });
+    const particles = new THREE.Points(particleGeo, particleMat);
+    scene.add(particles);
+
+    // ─── Animation ───
+    let t = 0;
+    function animate() {
+      requestAnimationFrame(animate);
+      t += 0.008;
+
+      torus.rotation.x = Math.sin(t * 0.4) * 0.3 + t * 0.18;
+      torus.rotation.y = t * 0.12;
+      torus.position.y = 1.5 + Math.sin(t * 0.5) * 0.4;
+
+      sphere.rotation.y = t * 0.2;
+      sphere.rotation.x = t * 0.1;
+      sphere.position.y = -1.5 + Math.sin(t * 0.6 + 1) * 0.35;
+
+      torus2.rotation.z = t * 0.25;
+      torus2.rotation.x = Math.sin(t * 0.35) * 0.4;
+      torus2.position.y = 3.5 + Math.sin(t * 0.7 + 2) * 0.3;
+
+      ico.rotation.x = t * 0.22;
+      ico.rotation.y = t * 0.18;
+      ico.position.y = -2.5 + Math.sin(t * 0.55 + 0.5) * 0.4;
+
+      smallSpheres.forEach((m, i) => {
+        m.position.y = smallData[i][1] + Math.sin(t * 0.6 + i * 1.2) * 0.25;
+        m.rotation.y = t * 0.3 + i;
+      });
+
+      particles.rotation.y = t * 0.03;
+      particles.rotation.x = t * 0.015;
+
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // ─── Resize ───
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // ─── Subtle parallax on mouse move ───
+    document.addEventListener('mousemove', (e) => {
+      const nx = (e.clientX / window.innerWidth - 0.5) * 0.8;
+      const ny = (e.clientY / window.innerHeight - 0.5) * 0.6;
+      camera.position.x += (nx - camera.position.x) * 0.04;
+      camera.position.y += (-ny - camera.position.y) * 0.04;
+    });
+  </script>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, once: true });
+  </script>
+</body>
+</html>

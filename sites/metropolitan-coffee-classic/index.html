@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metropolitan Coffee — San Francisco</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F5E6D3;
+    --text: #3D2817;
+    --accent: #C85A3A;
+    --accent2: #2C5F7F;
+    --cream: #FAF0E4;
+    --dark-brown: #2A1A0A;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 5vw;
+    background: rgba(245, 230, 211, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(200, 90, 58, 0.15);
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.04em;
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--text);
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.75;
+    transition: opacity 0.25s, color 0.25s;
+  }
+
+  .nav-links a:hover { opacity: 1; color: var(--accent); }
+
+  .nav-cta {
+    background: var(--accent);
+    color: #fff !important;
+    padding: 0.55rem 1.4rem;
+    border-radius: 100px;
+    opacity: 1 !important;
+    transition: transform 0.2s, box-shadow 0.2s !important;
+  }
+
+  .nav-cta:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 20px rgba(200, 90, 58, 0.4);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    padding: 7rem 5vw 5rem;
+  }
+
+  /* Turkish tile pattern background */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(200,90,58,0.06) 59px, rgba(200,90,58,0.06) 60px),
+      repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(200,90,58,0.06) 59px, rgba(200,90,58,0.06) 60px);
+    pointer-events: none;
+  }
+
+  /* Large decorative circle */
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: -15vw;
+    right: -12vw;
+    width: clamp(400px, 60vw, 800px);
+    height: clamp(400px, 60vw, 800px);
+    border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(200,90,58,0.13) 0%, rgba(200,90,58,0.03) 60%, transparent 80%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    max-width: 1300px;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(44, 95, 127, 0.1);
+    border: 1px solid rgba(44, 95, 127, 0.25);
+    color: var(--accent2);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent2);
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 6vw, 6.5rem);
+    font-weight: 900;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-title span {
+    font-style: italic;
+    background: linear-gradient(135deg, var(--accent) 0%, #E07A5F 60%, #C85A3A 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-tagline {
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--text);
+    opacity: 0.75;
+    max-width: 480px;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--accent);
+    color: #fff;
+    padding: 1rem 2.2rem;
+    border-radius: 100px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: transform 0.25s, box-shadow 0.25s;
+    box-shadow: 0 6px 30px rgba(200,90,58,0.35);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(200,90,58,0.5);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    color: var(--text);
+    padding: 1rem 2rem;
+    border-radius: 100px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: 2px solid rgba(61,40,23,0.25);
+    transition: border-color 0.25s, color 0.25s, background 0.25s;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--accent2);
+    color: var(--accent2);
+    background: rgba(44,95,127,0.06);
+  }
+
+  /* Hero visual / coffee cup illustration */
+  .hero-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  .coffee-scene {
+    position: relative;
+    width: clamp(280px, 40vw, 520px);
+    height: clamp(280px, 40vw, 520px);
+  }
+
+  /* Large decorative ring */
+  .scene-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid rgba(200,90,58,0.18);
+    animation: slowSpin 30s linear infinite;
+  }
+
+  .scene-ring::before {
+    content: '';
+    position: absolute;
+    top: 8%; left: 50%;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    transform: translateX(-50%);
+    opacity: 0.6;
+  }
+
+  .scene-ring::after {
+    content: '';
+    position: absolute;
+    bottom: 8%; left: 50%;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent2);
+    transform: translateX(-50%);
+    opacity: 0.5;
+  }
+
+  @keyframes slowSpin { to { transform: rotate(360deg); } }
+
+  /* Inner glowing circle */
+  .scene-inner {
+    position: absolute;
+    top: 10%; left: 10%; right: 10%; bottom: 10%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, rgba(250,240,228,0.9) 0%, rgba(245,230,211,0.5) 70%, transparent 100%);
+    border: 1px solid rgba(200,90,58,0.1);
+  }
+
+  /* CSS Coffee Cup */
+  .css-cup-wrap {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .css-steam {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 6px;
+    height: 30px;
+    align-items: flex-end;
+  }
+
+  .steam-line {
+    width: 3px;
+    border-radius: 3px;
+    background: linear-gradient(to top, rgba(200,90,58,0.4), transparent);
+    animation: steamRise 2.5s ease-in-out infinite;
+  }
+
+  .steam-line:nth-child(1) { height: 20px; animation-delay: 0s; }
+  .steam-line:nth-child(2) { height: 28px; animation-delay: 0.4s; }
+  .steam-line:nth-child(3) { height: 16px; animation-delay: 0.8s; }
+
+  @keyframes steamRise {
+    0%, 100% { opacity: 0.4; transform: translateY(0) scaleX(1); }
+    50% { opacity: 0.9; transform: translateY(-8px) scaleX(1.3); }
+  }
+
+  .css-cup {
+    width: 110px;
+    height: 80px;
+    background: linear-gradient(160deg, #C85A3A 0%, #8B3622 100%);
+    border-radius: 8px 8px 30px 30px;
+    position: relative;
+    clip-path: polygon(5% 0%, 95% 0%, 85% 100%, 15% 100%);
+    box-shadow: 0 8px 30px rgba(200,90,58,0.4), inset 0 2px 6px rgba(255,255,255,0.15);
+  }
+
+  .css-cup::before {
+    content: '';
+    position: absolute;
+    top: 8px; left: 12px; right: 12px;
+    height: 28px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(61,20,10,0.8) 30%, rgba(40,10,5,0.95) 100%);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4) inset;
+  }
+
+  /* Coffee foam swirl */
+  .css-cup::after {
+    content: '';
+    position: absolute;
+    top: 12px; left: 22px;
+    width: 30px; height: 12px;
+    border-radius: 50%;
+    border: 2px solid rgba(240,200,160,0.35);
+    border-bottom-color: transparent;
+    transform: rotate(-20deg);
+  }
+
+  .css-handle {
+    position: absolute;
+    right: -22px;
+    top: 15px;
+    width: 22px;
+    height: 35px;
+    border: 5px solid #8B3622;
+    border-left: none;
+    border-radius: 0 50px 50px 0;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.15);
+  }
+
+  .css-saucer {
+    width: 140px;
+    height: 18px;
+    background: linear-gradient(160deg, #E07A5F 0%, #C85A3A 50%, #8B3622 100%);
+    border-radius: 50%;
+    margin-top: 4px;
+    box-shadow: 0 6px 20px rgba(200,90,58,0.3);
+  }
+
+  /* Tile pattern decoration */
+  .tile-decoration {
+    position: absolute;
+    bottom: 5%;
+    right: 5%;
+    width: 80px;
+    height: 80px;
+    opacity: 0.4;
+  }
+
+  .tile-decoration::before, .tile-decoration::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  .tile-decoration::before {
+    inset: 0;
+    border: 2px solid var(--accent2);
+  }
+
+  .tile-decoration::after {
+    inset: 12px;
+    border: 1px solid var(--accent);
+  }
+
+  /* Floating beans */
+  .bean {
+    position: absolute;
+    width: 14px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--dark-brown);
+    opacity: 0.35;
+  }
+
+  .bean::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 15%;
+    right: 15%;
+    height: 1.5px;
+    background: rgba(245,230,211,0.4);
+    border-radius: 1px;
+    transform: translateY(-50%);
+  }
+
+  .bean-1 { top: 20%; left: 8%; transform: rotate(-20deg); animation: floatBean 4s ease-in-out infinite; }
+  .bean-2 { top: 65%; right: 10%; transform: rotate(30deg); animation: floatBean 5s ease-in-out infinite 1s; }
+  .bean-3 { bottom: 22%; left: 15%; transform: rotate(10deg); animation: floatBean 6s ease-in-out infinite 0.5s; }
+
+  @keyframes floatBean {
+    0%, 100% { transform: translateY(0) rotate(-20deg); }
+    50% { transform: translateY(-8px) rotate(-10deg); }
+  }
+
+  /* ── DIAGONAL DIVIDER ── */
+  .divider-wave {
+    width: 100%;
+    height: 80px;
+    position: relative;
+    overflow: hidden;
+    margin-top: -1px;
+  }
+
+  .divider-wave svg {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ── ABOUT ── */
+  .about {
+    padding: 7rem 5vw 6rem;
+    position: relative;
+  }
+
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    max-width: 40px;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  .about-inner {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .about-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--text);
+  }
+
+  .about-heading em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .about-text {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text);
+    opacity: 0.82;
+    margin-bottom: 1.5rem;
+  }
+
+  .about-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .feature-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(200,90,58,0.08);
+    border: 1px solid rgba(200,90,58,0.2);
+    color: var(--accent);
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    font-size: 0.82rem;
+    font-weight: 500;
+  }
+
+  /* Turkish tile row */
+  .tile-row {
+    display: flex;
+    gap: 1rem;
+    padding: 2rem 5vw;
+    justify-content: center;
+    overflow: hidden;
+    opacity: 0.2;
+  }
+
+  .tile-shape {
+    width: 50px; height: 50px;
+    border-radius: 4px;
+    border: 2px solid var(--accent);
+    position: relative;
+    transform: rotate(45deg);
+  }
+
+  .tile-shape::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border-radius: 50%;
+    border: 1px solid var(--accent2);
+  }
+
+  /* ── HOURS ── */
+  .hours {
+    padding: 6rem 5vw;
+    position: relative;
+    background: linear-gradient(135deg, rgba(44,95,127,0.05) 0%, rgba(200,90,58,0.05) 100%);
+    clip-path: polygon(0 4%, 100% 0, 100% 96%, 0 100%);
+    margin: -2px 0;
+  }
+
+  .hours-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .hours-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .hours-sub {
+    font-size: 0.95rem;
+    opacity: 0.6;
+    margin-bottom: 3rem;
+  }
+
+  .hours-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+  }
+
+  .hour-card {
+    background: rgba(245,230,211,0.8);
+    border: 1px solid rgba(200,90,58,0.15);
+    border-radius: 16px;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .hour-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(200,90,58,0.12);
+  }
+
+  .hour-day {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 0.5rem;
+  }
+
+  .hour-time {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .hour-badge {
+    display: inline-block;
+    margin-top: 0.4rem;
+    font-size: 0.65rem;
+    background: rgba(200,90,58,0.12);
+    color: var(--accent);
+    padding: 0.2rem 0.5rem;
+    border-radius: 100px;
+    font-weight: 600;
+  }
+
+  /* ── CONTACT ── */
+  .contact {
+    padding: 7rem 5vw 6rem;
+  }
+
+  .contact-inner {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .contact-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+
+  .contact-sub {
+    font-size: 1rem;
+    opacity: 0.7;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .contact-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .contact-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2rem;
+    background: rgba(200,90,58,0.05);
+    border: 1px solid rgba(200,90,58,0.12);
+    border-radius: 16px;
+    padding: 1.4rem 1.5rem;
+    text-decoration: none;
+    color: var(--text);
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  }
+
+  .contact-card:hover {
+    transform: translateX(6px);
+    box-shadow: 0 8px 25px rgba(200,90,58,0.1);
+    border-color: rgba(200,90,58,0.3);
+  }
+
+  .contact-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.1rem;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(200,90,58,0.3);
+  }
+
+  .contact-icon.blue {
+    background: var(--accent2);
+    box-shadow: 0 4px 12px rgba(44,95,127,0.3);
+  }
+
+  .contact-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.3rem;
+  }
+
+  .contact-value {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  /* Map placeholder */
+  .map-container {
+    border-radius: 24px;
+    overflow: hidden;
+    border: 2px solid rgba(200,90,58,0.15);
+    box-shadow: 0 20px 60px rgba(61,40,23,0.12);
+    position: relative;
+    height: 380px;
+    background: rgba(200,90,58,0.05);
+  }
+
+  .map-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
+  .map-overlay-btn {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+  }
+
+  /* ── CTA SECTION ── */
+  .cta-section {
+    padding: 5rem 5vw;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--text) 0%, #5A3020 100%);
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 20px,
+      rgba(255,255,255,0.015) 20px,
+      rgba(255,255,255,0.015) 21px
+    );
+    pointer-events: none;
+  }
+
+  .cta-section::after {
+    content: '';
+    position: absolute;
+    top: -30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,90,58,0.2) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-inner { position: relative; z-index: 1; }
+
+  .cta-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 1rem;
+  }
+
+  .cta-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 1rem;
+    line-height: 1.1;
+  }
+
+  .cta-heading span {
+    font-style: italic;
+    background: linear-gradient(90deg, #E07A5F, #C85A3A);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .cta-sub {
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 2.5rem;
+    font-size: 1rem;
+  }
+
+  .cta-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-white {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #fff;
+    color: var(--text);
+    padding: 1rem 2.2rem;
+    border-radius: 100px;
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 0.25s, box-shadow 0.25s;
+    box-shadow: 0 6px 30px rgba(0,0,0,0.25);
+  }
+
+  .btn-white:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+
+  .btn-outline-white {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    color: #fff;
+    padding: 1rem 2rem;
+    border-radius: 100px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: 2px solid rgba(255,255,255,0.35);
+    transition: border-color 0.25s, background 0.25s;
+  }
+
+  .btn-outline-white:hover {
+    border-color: rgba(255,255,255,0.7);
+    background: rgba(255,255,255,0.08);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--dark-brown);
+    padding: 2.5rem 5vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: rgba(255,255,255,0.6);
+    font-weight: 700;
+  }
+
+  .footer-credit {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.35);
+  }
+
+  .footer-credit a {
+    color: rgba(255,255,255,0.55);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-credit a:hover { color: var(--accent); }
+
+  .footer-hours-note {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.35);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .footer-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: inline-block;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .hero-visual { order: -1; }
+    .coffee-scene { width: 260px; height: 260px; }
+    .about-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .nav-links { display: none; }
+  }
+
+  @media (max-width: 600px) {
+    .hours-grid { grid-template-columns: repeat(2, 1fr); }
+    footer { flex-direction: column; text-align: center; }
+  }
+
+  /* Lantern decorative element */
+  .lantern-decoration {
+    position: absolute;
+    right: 5vw;
+    top: 50%;
+    transform: translateY(-50%);
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Metropolitan Coffee</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#hours">Hours</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="tel:4159269359" class="nav-cta">Call Now</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge">☕ San Francisco's Finest</div>
+      <h1 class="hero-title">
+        Metro&shy;politan<br><span>Coffee</span>
+      </h1>
+      <p class="hero-tagline">Where Turkish warmth meets the pulse of the city. A sanctuary of craft espresso, rich tradition, and good company on Market Street.</p>
+      <div class="hero-actions">
+        <a href="tel:4159269359" class="btn-primary">
+          📞 Call Now
+        </a>
+        <a href="https://maps.google.com/?q=720+Market+St+San+Francisco+CA+94102" target="_blank" class="btn-secondary">
+          📍 Find Us
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="coffee-scene">
+        <div class="scene-ring"></div>
+        <div class="scene-inner"></div>
+
+        <!-- Floating coffee beans -->
+        <div class="bean bean-1"></div>
+        <div class="bean bean-2"></div>
+        <div class="bean bean-3"></div>
+
+        <!-- Turkish tile decoration -->
+        <div class="tile-decoration"></div>
+
+        <!-- CSS Coffee Cup -->
+        <div class="css-cup-wrap">
+          <div class="css-steam">
+            <div class="steam-line"></div>
+            <div class="steam-line"></div>
+            <div class="steam-line"></div>
+          </div>
+          <div class="css-cup">
+            <div class="css-handle"></div>
+          </div>
+          <div class="css-saucer"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="divider-wave" style="background: #F5E6D3;">
+  <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="rgba(200,90,58,0.07)"/>
+  </svg>
+</div>
+
+<!-- Tile row ornament -->
+<div class="tile-row" aria-hidden="true">
+  <div class="tile-shape"></div>
+  <div class="tile-shape"></div>
+  <div class="tile-shape"></div>
+  <div class="tile-shape"></div>
+  <div class="tile-shape"></div>
+  <div class="tile-shape"></div>
+  <div class="tile-shape"></div>
+  <div class="tile-shape"></div>
+  <div class="tile-shape"></div>
+  <div class="tile-shape"></div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-inner">
+    <div data-aos="fade-right">
+      <div class="section-label">Our Story</div>
+      <h2 class="about-heading">
+        A place to <em>pause,</em><br>linger & savor
+      </h2>
+    </div>
+    <div data-aos="fade-left" data-aos-delay="100">
+      <p class="about-text">Metropolitan Coffee is more than a café — it's a destination. Nestled in the heart of San Francisco's bustling Market Street, our spacious interior offers the perfect balance of lively energy and quiet comfort, whether you're stopping in for a quick espresso or settling in for a long work session.</p>
+      <p class="about-text">Inspired by the warmth of Turkish coffee culture, we bring you artisan espresso alongside traditional pastries like flaky baklava, all served by a team that genuinely loves what they do. Step in, breathe deeply, and let the aroma do the rest.</p>
+      <div class="about-features">
+        <span class="feature-chip">☕ Craft Espresso</span>
+        <span class="feature-chip">🥐 Turkish Pastries</span>
+        <span class="feature-chip">🏮 Ambient Atmosphere</span>
+        <span class="feature-chip">💻 Work-Friendly</span>
+        <span class="feature-chip">🪑 Ample Seating</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOURS -->
+<section class="hours" id="hours">
+  <div class="hours-inner">
+    <div data-aos="fade-up">
+      <div class="section-label" style="justify-content: center;">Open Daily</div>
+      <h2 class="hours-heading">We're Here For You</h2>
+      <p class="hours-sub">Start your morning right, every day of the week.</p>
+    </div>
+    <div class="hours-grid" data-aos="fade-up" data-aos-delay="100">
+      <div class="hour-card">
+        <div class="hour-day">Mon</div>
+        <div class="hour-time">6:00 AM<br>–<br>6:00 PM</div>
+        <div class="hour-badge">Open</div>
+      </div>
+      <div class="hour-card">
+        <div class="hour-day">Tue</div>
+        <div class="hour-time">6:00 AM<br>–<br>6:00 PM</div>
+        <div class="hour-badge">Open</div>
+      </div>
+      <div class="hour-card">
+        <div class="hour-day">Wed</div>
+        <div class="hour-time">6:00 AM<br>–<br>6:00 PM</div>
+        <div class="hour-badge">Open</div>
+      </div>
+      <div class="hour-card">
+        <div class="hour-day">Thu</div>
+        <div class="hour-time">6:00 AM<br>–<br>6:00 PM</div>
+        <div class="hour-badge">Open</div>
+      </div>
+      <div class="hour-card">
+        <div class="hour-day">Fri</div>
+        <div class="hour-time">6:00 AM<br>–<br>6:00 PM</div>
+        <div class="hour-badge">Open</div>
+      </div>
+      <div class="hour-card">
+        <div class="hour-day">Sat</div>
+        <div class="hour-time">6:00 AM<br>–<br>6:00 PM</div>
+        <div class="hour-badge">Open</div>
+      </div>
+      <div class="hour-card">
+        <div class="hour-day">Sun</div>
+        <div class="hour-time">6:00 AM<br>–<br>6:00 PM</div>
+        <div class="hour-badge">Open</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div data-aos="fade-right">
+      <div class="section-label">Find Us</div>
+      <h2 class="contact-heading">Come Visit<br>Our Café</h2>
+      <p class="contact-sub">Located right on Market Street — San Francisco's main artery. Easy to reach by BART, Muni, or a pleasant walk through the city.</p>
+
+      <div class="contact-cards">
+        <a href="tel:4159269359" class="contact-card">
+          <div class="contact-icon">📞</div>
+          <div>
+            <div class="contact-label">Phone</div>
+            <div class="contact-value">(415) 926-9359</div>
+          </div>
+        </a>
+
+        <a href="https://maps.google.com/?q=720+Market+St+San+Francisco+CA+94102" target="_blank" class="contact-card">
+          <div class="contact-icon blue">📍</div>
+          <div>
+            <div class="contact-label">Address</div>
+            <div class="contact-value">720 Market St, San Francisco, CA 94102</div>
+          </div>
+        </a>
+
+        <div class="contact-card" style="cursor: default;">
+          <div class="contact-icon" style="background: var(--accent2); box-shadow: 0 4px 12px rgba(44,95,127,0.3);">🕐</div>
+          <div>
+            <div class="contact-label">Hours</div>
+            <div class="contact-value">Daily 6:00 AM – 6:00 PM</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div data-aos="fade-left" data-aos-delay="150">
+      <div class="map-container">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3152.9490956834!2d-122.4079!3d37.7864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085809c6c8f4233%3A0xb10ed6d9b5050fa5!2s720%20Market%20St%2C%20San%20Francisco%2C%20CA%2094102!5e0!3m2!1sen!2sus!4v1690000000000!5m2!1sen!2sus"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Metropolitan Coffee Location">
+        </iframe>
+        <div class="map-overlay-btn">
+          <a href="https://maps.google.com/?q=720+Market+St+San+Francisco+CA+94102" target="_blank" class="btn-primary" style="font-size: 0.88rem; padding: 0.75rem 1.8rem; box-shadow: 0 4px 20px rgba(0,0,0,0.25);">
+            Get Directions →
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA SECTION -->
+<section class="cta-section" data-aos="fade-up">
+  <div class="cta-inner">
+    <div class="cta-label">Your next cup awaits</div>
+    <h2 class="cta-heading">Ready for <span>extraordinary</span><br>coffee?</h2>
+    <p class="cta-sub">Open 7 days a week, 6 AM to 6 PM — no reservation needed.</p>
+    <div class="cta-actions">
+      <a href="tel:4159269359" class="btn-white">📞 Call (415) 926-9359</a>
+      <a href="https://maps.google.com/?q=720+Market+St+San+Francisco+CA+94102" target="_blank" class="btn-outline-white">📍 Get Directions</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">Metropolitan Coffee</div>
+  <div class="footer-hours-note">
+    <span class="footer-dot"></span>
+    720 Market St, San Francisco, CA
+  </div>
+  <div class="footer-credit">
+    Website built by <a href="https://platter.site" target="_blank">Platter</a>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init({ duration: 800, once: true });
+</script>
+
+</body>
+</html>
